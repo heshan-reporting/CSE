@@ -1,0 +1,2142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>CSE Pulse — Sri Lanka Stock Market, Real Estate, Policy & Sector Analysis</title>
+<meta name="description" content="Real-time Colombo Stock Exchange data, ASPI, S&P SL20, Sri Lanka stock quotes, IMF tracker, government policy hub, real estate index, and sector analysis."/>
+<meta name="keywords" content="CSE, Colombo Stock Exchange, ASPI, S&P SL20, Sri Lanka stocks, JKH, Sampath Bank, CSE Pulse, IMF Sri Lanka, Sri Lanka real estate, Sri Lanka policy"/>
+<meta property="og:title" content="CSE Pulse — Sri Lanka's #1 Market Platform"/>
+<meta property="og:description" content="CSE Pulse: Real-time CSE data, IMF programme tracker, government policy hub, real estate prices, sector analysis. Built for Lankan investors."/>
+<link rel="canonical" href="https://www.csepulse.lk/"/>
+<script type="application/ld+json">{"@context":"https://schema.org","@type":"FinancialService","name":"CSE Pulse","description":"Sri Lanka Colombo Stock Exchange analysis platform","url":"https://www.csepulse.lk","areaServed":{"@type":"Country","name":"Sri Lanka"}}</script>
+
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@300;400;500;600;700&family=Cormorant+Garamond:ital,wght@0,500;0,600;1,500&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet"/>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+<style>
+/* ── Design Tokens ───────────────────────────────────── */
+:root{
+  --bg:        #0e1117;
+  --bg2:       #131b2a;
+  --bg3:       #18222f;
+  --bg4:       #1d2b3a;
+  --border:    #1e2d42;
+  --border2:   #253548;
+  --text1:     #d9dde8;
+  --text2:     #8094a8;
+  --text3:     #4a6070;
+  --up:        #26a69a;
+  --up-bg:     rgba(38,166,154,.12);
+  --down:      #ef5350;
+  --down-bg:   rgba(239,83,80,.12);
+  --gold:      #C9A84C;
+  --gold2:     #e8c878;
+  --gold-bg:   rgba(201,168,76,.12);
+  --gold-border:rgba(201,168,76,.25);
+  --blue:      #3d85c8;
+  --purple:    #a78bfa;
+  --nav-h:     56px;
+  --radius:    6px;
+  --font:      'Plus Jakarta Sans',sans-serif;
+  --mono:      'JetBrains Mono',monospace;
+  --serif:     'Cormorant Garamond',serif;
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:14px;scroll-behavior:smooth}
+body{font-family:var(--font);background:var(--bg);color:var(--text1);line-height:1.5;overflow-x:hidden}
+a{color:inherit;text-decoration:none}
+button{cursor:pointer;border:none;background:none;font-family:var(--font)}
+::-webkit-scrollbar{width:5px;height:5px}
+::-webkit-scrollbar-track{background:var(--bg2)}
+::-webkit-scrollbar-thumb{background:var(--border2);border-radius:3px}
+.up{color:var(--up)} .down{color:var(--down)} .gold{color:var(--gold)}
+.mono{font-family:var(--mono)}
+
+/* ── Utility bar ─────────────────────────────────────── */
+.utility-bar{background:#0a0f1a;border-bottom:1px solid var(--border);height:30px;display:flex;align-items:center;font-size:11.5px;color:var(--text2)}
+.utility-bar .inner{max-width:1520px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between;width:100%}
+.util-left,.util-right{display:flex;gap:16px;align-items:center}
+.util-link{color:var(--text2);transition:color .15s}
+.util-link:hover{color:var(--text1)}
+.util-badge{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border);padding:1px 7px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.06em}
+.live-dot{width:6px;height:6px;border-radius:50%;background:var(--up);animation:blink 2s infinite;display:inline-block}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:.3}}
+
+/* ── Main Nav ────────────────────────────────────────── */
+nav.main-nav{background:#0c1420;border-bottom:1px solid var(--border);height:var(--nav-h);position:sticky;top:0;z-index:200}
+.nav-inner{max-width:1520px;margin:0 auto;padding:0 20px;display:flex;align-items:center;height:100%;gap:4px}
+.logo{display:flex;align-items:center;gap:8px;margin-right:24px;flex-shrink:0}
+.logo-icon{width:32px;height:32px;border-radius:7px;background:linear-gradient(135deg,var(--gold),#9a7b30);display:flex;align-items:center;justify-content:center;font-family:var(--serif);font-size:18px;font-weight:600;color:#0c1420}
+.logo-name{font-size:17px;font-weight:700;color:var(--text1)}
+.logo-name span{color:var(--gold)}
+.nav-menu{display:flex;align-items:center;gap:2px;flex:1;overflow-x:auto}
+.nav-item{padding:6px 13px;border-radius:var(--radius);font-size:13px;font-weight:500;color:var(--text2);transition:all .15s;white-space:nowrap}
+.nav-item:hover,.nav-item.active{color:var(--text1);background:var(--bg2)}
+.nav-item.new-badge::after{content:'NEW';font-size:8px;font-weight:800;color:var(--gold);background:var(--gold-bg);border:1px solid var(--gold-border);border-radius:3px;padding:1px 4px;margin-left:4px;vertical-align:super}
+.nav-divider{width:1px;height:18px;background:var(--border);margin:0 6px;flex-shrink:0}
+.nav-search{display:flex;align-items:center;gap:8px;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:0 12px;height:34px;width:210px;transition:border-color .2s}
+.nav-search:focus-within{border-color:var(--gold)}
+.nav-search input{background:none;border:none;outline:none;font-family:var(--font);font-size:12.5px;color:var(--text1);width:100%}
+.nav-search input::placeholder{color:var(--text3)}
+.search-icon{color:var(--text3);flex-shrink:0;font-size:12px}
+.nav-actions{display:flex;gap:8px;margin-left:8px;flex-shrink:0}
+.btn{display:inline-flex;align-items:center;gap:6px;padding:6px 16px;border-radius:var(--radius);font-family:var(--font);font-size:12.5px;font-weight:600;transition:all .15s;cursor:pointer}
+.btn-outline{border:1px solid var(--border);color:var(--text2)}
+.btn-outline:hover{border-color:var(--gold);color:var(--gold)}
+.btn-gold{background:var(--gold);color:#0c1420;border:1px solid var(--gold)}
+.btn-gold:hover{background:var(--gold2);box-shadow:0 0 20px rgba(201,168,76,.3);transform:translateY(-1px)}
+
+/* ── Ticker Tape ─────────────────────────────────────── */
+.ticker-tape{background:var(--bg2);border-bottom:1px solid var(--border);height:34px;overflow:hidden;display:flex;align-items:center}
+.ticker-label{background:var(--gold);color:#0c1420;font-size:10px;font-weight:800;letter-spacing:.1em;padding:0 12px;height:100%;display:flex;align-items:center;flex-shrink:0;white-space:nowrap;text-transform:uppercase}
+.ticker-scroll{overflow:hidden;flex:1;display:flex}
+.ticker-track{display:flex;white-space:nowrap;animation:scroll 50s linear infinite}
+.ticker-track:hover{animation-play-state:paused}
+@keyframes scroll{0%{transform:translateX(0)}100%{transform:translateX(-50%)}}
+.t-item{display:inline-flex;align-items:center;gap:7px;padding:0 22px;font-size:12px;border-right:1px solid var(--border)}
+.t-sym{font-weight:600;color:var(--text1)}
+.t-price{font-family:var(--mono);color:var(--text2)}
+.t-chg{font-family:var(--mono);font-size:11px;font-weight:500}
+
+/* ── Index Overview Cards ────────────────────────────── */
+.index-bar{background:var(--bg);border-bottom:2px solid var(--border);padding:14px 0}
+.index-cards{max-width:1520px;margin:0 auto;padding:0 20px;display:grid;grid-template-columns:repeat(5,1fr);gap:2px}
+.idx-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:12px 16px;cursor:pointer;transition:all .2s;position:relative;overflow:hidden}
+.idx-card:hover{border-color:var(--gold);background:var(--bg3)}
+.idx-card.active{border-color:var(--gold);border-bottom:2px solid var(--gold)}
+.idx-card::after{content:'';position:absolute;bottom:0;left:0;right:0;height:2px;background:transparent;transition:background .2s}
+.idx-card.active::after{background:var(--gold)}
+.idx-top{display:flex;justify-content:space-between;align-items:flex-start;margin-bottom:6px}
+.idx-name{font-size:11px;font-weight:600;color:var(--text2);letter-spacing:.04em;text-transform:uppercase;max-width:120px;line-height:1.3}
+.idx-flag{font-size:14px}
+.idx-val{font-family:var(--mono);font-size:18px;font-weight:600;letter-spacing:-.02em;margin-bottom:3px}
+.idx-chg{font-size:11.5px;font-weight:600;font-family:var(--mono)}
+.idx-mini{height:38px;margin-top:8px}
+
+/* ── Page Layout ─────────────────────────────────────── */
+.page-wrap{max-width:1520px;margin:0 auto;padding:16px 20px;display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+.main-col{min-width:0}
+.sidebar-col{position:sticky;top:calc(var(--nav-h) + 2px);display:flex;flex-direction:column;gap:14px}
+
+/* ── Section Header ──────────────────────────────────── */
+.sec-head{display:flex;align-items:center;justify-content:space-between;margin-bottom:12px}
+.sec-title{font-size:15px;font-weight:700;color:var(--text1)}
+.sec-subtitle{font-size:11.5px;color:var(--text2);margin-top:2px}
+.view-more{font-size:12px;color:var(--gold);font-weight:600}
+.view-more:hover{text-decoration:underline}
+
+/* ── Asset Class Tabs ────────────────────────────────── */
+.asset-tabs{display:flex;gap:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden;margin-bottom:12px}
+.asset-tab{flex:1;padding:9px 6px;text-align:center;font-size:12px;font-weight:600;color:var(--text2);border-right:1px solid var(--border);transition:all .15s;white-space:nowrap}
+.asset-tab:last-child{border-right:none}
+.asset-tab:hover{color:var(--text1);background:var(--bg3)}
+.asset-tab.active{color:var(--gold);background:var(--bg3);border-bottom:2px solid var(--gold)}
+
+/* ── Data Table ──────────────────────────────────────── */
+.data-table-wrap{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.table-toolbar{display:flex;align-items:center;gap:10px;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg3)}
+.toolbar-count{font-size:11.5px;color:var(--text2)}
+.toolbar-search{display:flex;align-items:center;gap:6px;margin-left:auto;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:4px 10px;font-size:12px;color:var(--text2)}
+.toolbar-search input{background:none;border:none;outline:none;color:var(--text1);font-family:var(--font);font-size:12px;width:140px}
+.toolbar-search input::placeholder{color:var(--text3)}
+.filter-btn{padding:4px 10px;border:1px solid var(--border);border-radius:4px;font-size:11.5px;color:var(--text2);transition:all .15s}
+.filter-btn:hover,.filter-btn.active{border-color:var(--gold);color:var(--gold);background:var(--gold-bg)}
+
+table.dt{width:100%;border-collapse:collapse}
+table.dt thead tr{background:var(--bg3);border-bottom:1px solid var(--border)}
+table.dt th{padding:9px 12px;text-align:left;font-size:11px;font-weight:700;color:var(--text2);letter-spacing:.05em;text-transform:uppercase;white-space:nowrap;cursor:pointer;user-select:none;border-right:1px solid var(--border)}
+table.dt th:last-child{border-right:none}
+table.dt th:hover{color:var(--text1)}
+table.dt th.sorted{color:var(--gold)}
+table.dt th .sort-icon{margin-left:4px;opacity:.5;font-size:9px}
+table.dt th.sorted .sort-icon{opacity:1;color:var(--gold)}
+table.dt tbody tr{border-bottom:1px solid rgba(30,45,66,.6);transition:background .1s}
+table.dt tbody tr:last-child{border-bottom:none}
+table.dt tbody tr:hover{background:rgba(255,255,255,.025)}
+table.dt tbody tr.flash-up{animation:flashUp .8s ease}
+table.dt tbody tr.flash-down{animation:flashDown .8s ease}
+@keyframes flashUp{0%{background:rgba(38,166,154,.25)}100%{background:transparent}}
+@keyframes flashDown{0%{background:rgba(239,83,80,.25)}100%{background:transparent}}
+table.dt td{padding:10px 12px;font-size:13px;border-right:1px solid rgba(30,45,66,.4);white-space:nowrap}
+table.dt td:last-child{border-right:none}
+.star-btn{color:var(--text3);font-size:13px;cursor:pointer;transition:color .2s}
+.star-btn:hover,.star-btn.active{color:var(--gold)}
+.stock-cell{display:flex;flex-direction:column;gap:2px}
+.stock-sym{font-weight:700;font-size:13px}
+.stock-full{font-size:10.5px;color:var(--text2)}
+.price-cell{font-family:var(--mono);font-size:13px;font-weight:500}
+.chg-pill{display:inline-block;padding:2px 7px;border-radius:3px;font-family:var(--mono);font-size:11.5px;font-weight:600}
+.chg-up{background:var(--up-bg);color:var(--up)}
+.chg-down{background:var(--down-bg);color:var(--down)}
+.chg-zero{background:var(--gold-bg);color:var(--gold)}
+.vol-cell{font-family:var(--mono);font-size:12px;color:var(--text2)}
+.time-cell{font-family:var(--mono);font-size:11px;color:var(--text3)}
+.signal-cell span{display:inline-block;padding:2px 7px;border-radius:3px;font-size:10.5px;font-weight:700;letter-spacing:.04em}
+.sig-buy{background:rgba(38,166,154,.15);color:var(--up)}
+.sig-hold{background:var(--gold-bg);color:var(--gold)}
+.sig-sell{background:var(--down-bg);color:var(--down)}
+.spark-cell canvas{display:block}
+
+/* ── Chart Panel ─────────────────────────────────────── */
+.chart-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-top:14px;overflow:hidden}
+.chart-header{display:flex;align-items:center;gap:12px;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg3)}
+.chart-index-selector{display:flex;gap:4px}
+.cis-btn{padding:4px 10px;border-radius:4px;font-size:12px;font-weight:600;color:var(--text2);border:1px solid transparent;transition:all .15s}
+.cis-btn:hover{color:var(--text1)}
+.cis-btn.active{color:var(--gold);background:var(--gold-bg);border-color:var(--gold-border)}
+.time-btns{display:flex;gap:2px;margin-left:auto}
+.time-btn{padding:3px 9px;border-radius:4px;font-size:11.5px;font-weight:600;color:var(--text2);transition:all .15s}
+.time-btn:hover{color:var(--text1);background:var(--bg4)}
+.time-btn.active{color:var(--gold);background:var(--gold-bg)}
+.chart-stat{text-align:right}
+.chart-stat .cv{font-family:var(--mono);font-size:20px;font-weight:600}
+.chart-stat .cc{font-family:var(--mono);font-size:12px}
+.chart-body{padding:14px 16px}
+
+/* ── News Section ────────────────────────────────────── */
+.news-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);margin-top:14px;overflow:hidden}
+.news-tabs{display:flex;border-bottom:1px solid var(--border);background:var(--bg3)}
+.news-tab{padding:10px 16px;font-size:12.5px;font-weight:600;color:var(--text2);border-bottom:2px solid transparent;transition:all .15s}
+.news-tab.active{color:var(--gold);border-bottom-color:var(--gold)}
+.news-tab:hover{color:var(--text1)}
+.news-featured{display:grid;grid-template-columns:1fr 1fr;border-bottom:1px solid var(--border)}
+.news-hero{padding:16px;border-right:1px solid var(--border)}
+.news-hero-tag{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:8px}
+.tag-bull{background:rgba(38,166,154,.15);color:var(--up)}
+.tag-bear{background:var(--down-bg);color:var(--down)}
+.tag-neutral{background:var(--gold-bg);color:var(--gold)}
+.tag-macro{background:rgba(61,133,200,.15);color:var(--blue)}
+.news-hero h2{font-family:var(--serif);font-size:20px;font-weight:600;line-height:1.3;margin-bottom:8px;color:var(--text1)}
+.news-hero h2:hover{color:var(--gold);cursor:pointer}
+.news-hero p{font-size:12.5px;color:var(--text2);line-height:1.6;margin-bottom:10px}
+.news-meta{display:flex;align-items:center;gap:10px;font-size:11px;color:var(--text3)}
+.news-source{color:var(--gold);font-weight:600}
+.news-stocksense{display:inline-flex;align-items:center;gap:4px;background:rgba(38,166,154,.1);border:1px solid rgba(38,166,154,.2);border-radius:3px;padding:2px 7px;font-size:10px;font-weight:700;color:var(--up)}
+.news-list-side{display:flex;flex-direction:column}
+.news-list-item{padding:12px 16px;border-bottom:1px solid var(--border);display:flex;gap:10px;align-items:flex-start;transition:background .15s}
+.news-list-item:last-child{border-bottom:none}
+.news-list-item:hover{background:rgba(255,255,255,.02);cursor:pointer}
+.nli-icon{font-size:20px;flex-shrink:0;margin-top:2px}
+.nli-content h4{font-size:13px;font-weight:600;line-height:1.35;margin-bottom:4px;color:var(--text1)}
+.nli-content h4:hover{color:var(--gold)}
+.nli-meta{font-size:10.5px;color:var(--text3);display:flex;gap:8px;align-items:center}
+.news-grid-row{display:grid;grid-template-columns:repeat(3,1fr);border-top:1px solid var(--border)}
+.news-grid-item{padding:14px;border-right:1px solid var(--border);transition:background .15s;cursor:pointer}
+.news-grid-item:last-child{border-right:none}
+.news-grid-item:hover{background:rgba(255,255,255,.02)}
+.ngi-tag{font-size:10px;font-weight:700;letter-spacing:.06em;text-transform:uppercase;margin-bottom:6px}
+.ngi-title{font-size:13px;font-weight:600;line-height:1.4;margin-bottom:8px;color:var(--text1)}
+.ngi-meta{font-size:11px;color:var(--text3)}
+
+/* ── Eco Calendar ────────────────────────────────────── */
+.eco-section{margin-top:14px}
+.eco-panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.eco-date-header{padding:8px 12px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em}
+.eco-table{width:100%;border-collapse:collapse}
+.eco-table th{padding:8px 12px;font-size:10.5px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;background:var(--bg3);border-bottom:1px solid var(--border);border-right:1px solid var(--border)}
+.eco-table th:last-child{border-right:none}
+.eco-table td{padding:9px 12px;font-size:12.5px;border-bottom:1px solid rgba(30,45,66,.6);border-right:1px solid rgba(30,45,66,.4)}
+.eco-table td:last-child{border-right:none}
+.eco-table tr:last-child td{border-bottom:none}
+.eco-table tr:hover td{background:rgba(255,255,255,.02)}
+.imp-low{color:var(--text3);font-size:10px}
+.imp-med{color:var(--gold);font-size:10px}
+.imp-high{color:var(--down);font-size:10px}
+.eco-country{display:flex;align-items:center;gap:6px;font-size:11.5px}
+.eco-event{font-size:12.5px;font-weight:500}
+.eco-val{font-family:var(--mono);font-size:12px}
+.eco-actual.positive{color:var(--up)}
+.eco-actual.negative{color:var(--down)}
+
+/* ── RIGHT SIDEBAR ───────────────────────────────────── */
+.sidebar-widget{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.sw-header{display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-bottom:1px solid var(--border);background:var(--bg3)}
+.sw-title{font-size:12.5px;font-weight:700;color:var(--text1)}
+.sw-link{font-size:11px;color:var(--gold)}
+.sw-link:hover{text-decoration:underline}
+.mkt-status{padding:14px}
+.mkt-status-badge{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:12.5px;font-weight:700;margin-bottom:10px}
+.mkt-open{background:rgba(38,166,154,.15);color:var(--up);border:1px solid rgba(38,166,154,.3)}
+.mkt-closed{background:var(--down-bg);color:var(--down);border:1px solid rgba(239,83,80,.3)}
+.mkt-stat-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin-top:10px}
+.mkt-stat-item{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:8px 10px}
+.msl{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.04em;margin-bottom:3px}
+.msv{font-family:var(--mono);font-size:14px;font-weight:600}
+.adv-bar{flex:1;height:8px;border-radius:4px;overflow:hidden;display:flex}
+.adv-up{background:var(--up)}
+.adv-down{background:var(--down)}
+.adv-neutral{background:var(--text3)}
+.adv-labels{display:flex;justify-content:space-between;margin-top:4px;font-size:10.5px}
+.adv-labels .al-up{color:var(--up)}
+.adv-labels .al-down{color:var(--down)}
+.adv-labels .al-n{color:var(--text3)}
+
+/* Most Visited */
+.mv-list{display:flex;flex-direction:column}
+.mv-item{display:flex;align-items:center;gap:10px;padding:9px 14px;border-bottom:1px solid rgba(30,45,66,.6);transition:background .15s;cursor:pointer}
+.mv-item:last-child{border-bottom:none}
+.mv-item:hover{background:rgba(255,255,255,.025)}
+.mv-rank{font-size:10.5px;color:var(--text3);width:14px;font-family:var(--mono)}
+.mv-info{flex:1;min-width:0}
+.mv-sym{font-size:12.5px;font-weight:700;color:var(--text1)}
+.mv-name{font-size:10px;color:var(--text2);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.mv-price{font-family:var(--mono);font-size:12px;text-align:right}
+.mv-chg{font-family:var(--mono);font-size:11px;text-align:right;font-weight:600}
+
+/* Technical Summary */
+.tech-gauge{padding:14px;text-align:center}
+.gauge-wrap{position:relative;width:140px;margin:0 auto 10px}
+.gauge-label-row{display:flex;justify-content:space-between;font-size:10px;color:var(--text2);margin-top:4px}
+.gauge-value{font-size:13px;font-weight:700;margin-top:4px}
+.tech-breakdown{display:grid;grid-template-columns:repeat(3,1fr);gap:6px;margin-top:12px}
+.tb-item{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:6px;text-align:center}
+.tb-count{font-size:16px;font-weight:700;font-family:var(--mono)}
+.tb-label{font-size:10px;color:var(--text2);margin-top:2px}
+.tb-sell{color:var(--down)} .tb-neutral{color:var(--gold)} .tb-buy{color:var(--up)}
+
+/* Stock Sense LK Widget */
+.stocksense-widget{padding:0}
+.stocksense-chat{padding:12px;max-height:200px;overflow-y:auto;display:flex;flex-direction:column;gap:8px}
+.stocksense-msg{display:flex;gap:8px;align-items:flex-start}
+.stocksense-avatar{width:24px;height:24px;border-radius:50%;background:linear-gradient(135deg,var(--gold),#9a7b30);display:flex;align-items:center;justify-content:center;font-size:11px;font-weight:700;color:#0c1420;flex-shrink:0}
+.stocksense-bubble{background:var(--bg3);border:1px solid var(--border);border-radius:4px 10px 10px 10px;padding:8px 10px;font-size:12px;line-height:1.5;color:var(--text1)}
+.user-msg{flex-direction:row-reverse}
+.user-avatar{width:24px;height:24px;border-radius:50%;background:var(--bg4);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:10px;color:var(--text2);flex-shrink:0}
+.user-bubble{background:var(--bg4);border:1px solid var(--border);border-radius:10px 4px 10px 10px;padding:8px 10px;font-size:12px;color:var(--text2)}
+.stocksense-input-row{display:flex;align-items:center;gap:6px;padding:8px 10px;border-top:1px solid var(--border);background:var(--bg3)}
+.stocksense-input{flex:1;background:var(--bg2);border:1px solid var(--border);border-radius:4px;padding:5px 9px;font-family:var(--font);font-size:11.5px;color:var(--text1);outline:none}
+.stocksense-input::placeholder{color:var(--text3)}
+.stocksense-input:focus{border-color:var(--gold)}
+.stocksense-send{background:var(--gold);color:#0c1420;border-radius:4px;padding:5px 10px;font-size:11px;font-weight:700;transition:opacity .15s}
+.stocksense-send:hover{opacity:.85}
+
+/* Recovery Tracker Sidebar */
+.recovery-sidebar{padding:12px}
+.recovery-score{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.rs-label{font-size:11px;color:var(--text2);margin-bottom:4px}
+.rs-bar{height:6px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.rs-fill{height:100%;width:74%;background:linear-gradient(90deg,var(--up),var(--gold));border-radius:3px}
+.rs-value{font-family:var(--mono);font-size:32px;font-weight:600;color:var(--gold)}
+.recovery-metrics{display:flex;flex-direction:column;gap:6px}
+.rm-item{display:flex;justify-content:space-between;align-items:center;font-size:11.5px;padding:3px 0}
+.rm-label{color:var(--text2)}
+.rm-val{font-family:var(--mono);font-size:11.5px;font-weight:600}
+
+/* ── Full-Width Section Wrapper ──────────────────────── */
+.full-section{max-width:1520px;margin:0 auto;padding:20px 20px}
+.fs-head{display:flex;align-items:center;justify-content:space-between;padding-bottom:14px;border-bottom:1px solid var(--border);margin-bottom:20px}
+.fs-title{font-size:18px;font-weight:700;color:var(--text1);display:flex;align-items:center;gap:10px}
+.fs-sub{font-size:12px;color:var(--text2);margin-top:3px}
+.section-divider{border:none;border-top:6px solid var(--bg);margin:0;background:var(--bg2);padding:0}
+
+/* ── Real Estate ─────────────────────────────────────── */
+.re-grid{display:grid;grid-template-columns:1fr 320px;gap:16px}
+.re-main{display:flex;flex-direction:column;gap:14px}
+.re-sidebar{display:flex;flex-direction:column;gap:14px}
+.re-price-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.re-price-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;transition:border-color .15s;cursor:pointer}
+.re-price-card:hover{border-color:var(--border2)}
+.re-area{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.re-type-badge{font-size:9.5px;padding:2px 6px;border-radius:3px;font-weight:700;margin-bottom:8px;display:inline-block}
+.re-badge-condo{background:rgba(61,133,200,.15);color:#3d85c8;border:1px solid rgba(61,133,200,.25)}
+.re-badge-comm{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border)}
+.re-badge-land{background:rgba(38,166,154,.12);color:var(--up);border:1px solid rgba(38,166,154,.25)}
+.re-badge-villa{background:rgba(167,139,250,.12);color:var(--purple);border:1px solid rgba(167,139,250,.25)}
+.re-price{font-family:var(--mono);font-size:17px;font-weight:600;color:var(--text1);margin-bottom:3px}
+.re-unit{font-size:10px;color:var(--text3)}
+.re-chg{font-family:var(--mono);font-size:11.5px;font-weight:600;margin-top:5px}
+.re-yield{font-size:10.5px;color:var(--text2);margin-top:3px}
+.re-vs-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.re-vs-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg3)}
+.re-vs-title{font-size:13px;font-weight:700;color:var(--text1)}
+.re-vs-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.re-vs-stat{background:var(--bg3);padding:10px 14px;text-align:center}
+.re-vs-stat .rv{font-family:var(--mono);font-size:16px;font-weight:600}
+.re-vs-stat .rl{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.05em;margin-top:2px}
+.re-dev-list{display:flex;flex-direction:column}
+.re-dev-item{display:flex;align-items:center;gap:12px;padding:10px 14px;border-bottom:1px solid rgba(30,45,66,.5);transition:background .15s;cursor:pointer}
+.re-dev-item:last-child{border-bottom:none}
+.re-dev-item:hover{background:rgba(255,255,255,.02)}
+.re-dev-icon{width:34px;height:34px;border-radius:6px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:14px;flex-shrink:0}
+.re-dev-info{flex:1;min-width:0}
+.re-dev-name{font-size:12.5px;font-weight:700;color:var(--text1)}
+.re-dev-sym{font-size:10.5px;color:var(--text2)}
+.re-dev-price{text-align:right}
+.re-dev-prc{font-family:var(--mono);font-size:13px;color:var(--text1)}
+.re-dev-chg{font-family:var(--mono);font-size:11px;font-weight:600}
+.re-portcity{background:linear-gradient(135deg,rgba(13,20,32,0.95),rgba(20,35,55,0.95));border:1px solid var(--border);border-radius:var(--radius);padding:16px;position:relative;overflow:hidden}
+.re-portcity::before{content:'🏙️';font-size:80px;position:absolute;right:-10px;bottom:-10px;opacity:.08}
+.re-pc-title{font-size:12px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.08em;margin-bottom:10px}
+.re-pc-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.re-pc-item{background:rgba(0,0,0,.3);border-radius:4px;padding:8px 10px}
+.re-pc-label{font-size:10px;color:var(--text3);margin-bottom:3px}
+.re-pc-val{font-family:var(--mono);font-size:13px;font-weight:500}
+.re-trend-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.re-trend-header{padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg3);display:flex;justify-content:space-between;align-items:center}
+.re-trend-title{font-size:13px;font-weight:700}
+.re-hotspot-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:1px;background:var(--border)}
+.re-hs-item{background:var(--bg2);padding:12px 14px}
+.re-hs-area{font-size:11px;font-weight:700;color:var(--text1);margin-bottom:3px}
+.re-hs-type{font-size:10px;color:var(--text3);margin-bottom:6px}
+.re-hs-price{font-family:var(--mono);font-size:13px;font-weight:600;margin-bottom:2px}
+.re-hs-trend{font-family:var(--mono);font-size:11px;font-weight:600}
+.re-insight-list{display:flex;flex-direction:column;gap:0}
+.re-insight-item{padding:12px 14px;border-bottom:1px solid rgba(30,45,66,.5);display:flex;gap:10px;align-items:flex-start}
+.re-insight-item:last-child{border-bottom:none}
+.re-insight-icon{font-size:16px;flex-shrink:0;margin-top:1px}
+.re-insight-text{font-size:12px;color:var(--text1);line-height:1.5}
+.re-insight-tag{font-size:10px;font-weight:700;margin-top:3px}
+
+/* ── Policy Hub ──────────────────────────────────────── */
+.policy-layout{display:grid;grid-template-columns:1fr 340px;gap:16px}
+.policy-main{display:flex;flex-direction:column;gap:14px}
+.policy-sidebar-col{display:flex;flex-direction:column;gap:14px}
+.policy-radar{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.pol-item{display:grid;grid-template-columns:110px 1fr 90px 80px;align-items:center;gap:14px;padding:11px 14px;border-bottom:1px solid rgba(30,45,66,.5);transition:background .15s;cursor:pointer}
+.pol-item:last-child{border-bottom:none}
+.pol-item:hover{background:rgba(255,255,255,.02)}
+.pol-date{font-family:var(--mono);font-size:11px;color:var(--text3)}
+.pol-event{font-size:12.5px;font-weight:600;color:var(--text1);line-height:1.3}
+.pol-desc{font-size:11px;color:var(--text2);margin-top:2px}
+.pol-impact-pill{display:inline-flex;align-items:center;gap:4px;padding:3px 8px;border-radius:3px;font-size:10.5px;font-weight:700;white-space:nowrap}
+.imp-pos{background:rgba(38,166,154,.15);color:var(--up);border:1px solid rgba(38,166,154,.25)}
+.imp-neg{background:var(--down-bg);color:var(--down);border:1px solid rgba(239,83,80,.25)}
+.imp-neu{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border)}
+.imp-mix{background:rgba(139,92,246,.12);color:#a78bfa;border:1px solid rgba(139,92,246,.25)}
+.pol-sectors{display:flex;gap:4px;flex-wrap:wrap}
+.pol-sec-tag{font-size:9.5px;padding:1px 6px;border-radius:3px;background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+.sentiment-widget{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.gov-score-wrap{text-align:center;padding:8px 0 12px}
+.gov-score-num{font-family:var(--mono);font-size:42px;font-weight:600;line-height:1}
+.gov-score-label{font-size:11px;color:var(--text2);margin-top:4px;text-transform:uppercase;letter-spacing:.06em}
+.gov-score-bar{height:8px;background:var(--bg4);border-radius:4px;overflow:hidden;margin:10px 0}
+.gov-score-fill{height:100%;border-radius:4px}
+.gov-breakdown{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+.gov-dim{display:flex;align-items:center;gap:8px}
+.gov-dim-label{font-size:11.5px;color:var(--text2);flex:1}
+.gov-dim-bar{width:80px;height:5px;background:var(--bg4);border-radius:3px;overflow:hidden}
+.gov-dim-fill{height:100%;border-radius:3px}
+.gov-dim-val{font-family:var(--mono);font-size:11px;color:var(--text1);min-width:28px;text-align:right}
+.rate-timeline{display:flex;flex-direction:column;gap:0}
+.rate-event{display:grid;grid-template-columns:90px 1fr 70px;align-items:center;gap:12px;padding:9px 14px;border-bottom:1px solid rgba(30,45,66,.5)}
+.rate-event:last-child{border-bottom:none}
+.rate-date{font-family:var(--mono);font-size:10.5px;color:var(--text3)}
+.rate-desc{font-size:12px;color:var(--text1)}
+.rate-val{font-family:var(--mono);font-size:13px;font-weight:600;text-align:right}
+.budget-impact{display:grid;grid-template-columns:repeat(2,1fr);gap:8px}
+.bi-item{background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:10px 12px}
+.bi-measure{font-size:12px;font-weight:600;color:var(--text1);margin-bottom:4px;line-height:1.3}
+.bi-sector{font-size:10.5px;color:var(--text2);margin-bottom:6px}
+.bi-verdict{font-size:11px;font-weight:700;display:flex;align-items:center;gap:5px}
+/* Future policy decisions */
+.future-pol-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.fp-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;position:relative;overflow:hidden}
+.fp-card::before{content:'';position:absolute;top:0;left:0;right:0;height:3px}
+.fp-card.high::before{background:var(--gold)}
+.fp-card.med::before{background:var(--blue)}
+.fp-card.low::before{background:var(--text3)}
+.fp-timeline{font-size:10px;font-weight:700;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:6px}
+.fp-title{font-size:12.5px;font-weight:700;color:var(--text1);margin-bottom:6px;line-height:1.3}
+.fp-body{font-size:11.5px;color:var(--text2);line-height:1.5;margin-bottom:10px}
+.fp-impacts{display:flex;flex-direction:column;gap:4px}
+.fp-impact{display:flex;align-items:center;gap:6px;font-size:11px}
+.fp-sector-tag{font-size:9.5px;font-weight:700;padding:1px 6px;border-radius:3px;background:var(--bg3);border:1px solid var(--border);color:var(--text2)}
+.fp-arrow{font-size:11px}
+.fp-arrow.pos{color:var(--up)}
+.fp-arrow.neg{color:var(--down)}
+.fp-arrow.neu{color:var(--gold)}
+
+/* ── IMF Tracker ─────────────────────────────────────── */
+.imf-layout{display:grid;grid-template-columns:1fr 300px;gap:16px}
+.imf-main{display:flex;flex-direction:column;gap:14px}
+.imf-sidebar{display:flex;flex-direction:column;gap:14px}
+.imf-timeline{display:flex;flex-direction:column;gap:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.imf-review{display:grid;grid-template-columns:60px 1fr 120px 100px 90px;align-items:center;gap:14px;padding:12px 16px;border-bottom:1px solid rgba(30,45,66,.5);transition:background .15s}
+.imf-review:hover{background:rgba(255,255,255,.02)}
+.imf-review:last-child{border-bottom:none}
+.imf-review.current{background:rgba(201,168,76,.04);border-left:3px solid var(--gold)}
+.imf-review.upcoming{opacity:.7}
+.imf-rev-num{font-family:var(--mono);font-size:12px;font-weight:700;color:var(--gold);text-align:center}
+.imf-rev-info{min-width:0}
+.imf-rev-title{font-size:12.5px;font-weight:700;color:var(--text1)}
+.imf-rev-date{font-size:10.5px;color:var(--text3);font-family:var(--mono);margin-top:2px}
+.imf-rev-amount{font-family:var(--mono);font-size:13px;font-weight:600}
+.imf-rev-status{font-size:10.5px;font-weight:700;padding:3px 8px;border-radius:3px}
+.imf-done{background:rgba(38,166,154,.15);color:var(--up);border:1px solid rgba(38,166,154,.25)}
+.imf-pending{background:var(--gold-bg);color:var(--gold);border:1px solid var(--gold-border)}
+.imf-future{background:var(--bg3);color:var(--text3);border:1px solid var(--border)}
+.imf-cond{font-size:11px;color:var(--text2);line-height:1.4}
+.imf-progress-bar{height:10px;background:var(--bg3);border-radius:5px;overflow:hidden;margin:12px 0}
+.imf-prog-fill{height:100%;border-radius:5px;background:linear-gradient(90deg,var(--up),var(--gold))}
+.imf-benchmarks{display:flex;flex-direction:column;gap:8px}
+.imf-bench{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 12px;background:var(--bg3);border:1px solid var(--border);border-radius:4px}
+.imf-bench-name{font-size:12px;color:var(--text1);flex:1}
+.imf-bench-status{font-size:10.5px;font-weight:700;padding:2px 8px;border-radius:3px;white-space:nowrap}
+.bench-met{background:rgba(38,166,154,.15);color:var(--up)}
+.bench-partial{background:var(--gold-bg);color:var(--gold)}
+.bench-pending{background:var(--bg4);color:var(--text3)}
+.imf-macro-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:10px}
+.imf-macro-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px;text-align:center}
+.imc-label{font-size:10px;color:var(--text2);text-transform:uppercase;letter-spacing:.06em;margin-bottom:8px}
+.imc-val{font-family:var(--mono);font-size:20px;font-weight:600;margin-bottom:3px}
+.imc-target{font-size:10px;color:var(--text3)}
+.imc-bar{height:5px;background:var(--bg3);border-radius:3px;overflow:hidden;margin:8px 0 3px}
+.imc-fill{height:100%;border-radius:3px}
+.imf-econ-impact{display:flex;flex-direction:column;gap:0;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.imf-ei-item{display:grid;grid-template-columns:140px 1fr 90px;gap:14px;align-items:center;padding:10px 14px;border-bottom:1px solid rgba(30,45,66,.5)}
+.imf-ei-item:last-child{border-bottom:none}
+.imf-ei-condition{font-size:12px;font-weight:600;color:var(--text1)}
+.imf-ei-economy{font-size:11.5px;color:var(--text2);line-height:1.4}
+.imf-ei-verdict{text-align:right;font-size:11px;font-weight:700}
+.imf-ei-verdict.pos{color:var(--up)}
+.imf-ei-verdict.neg{color:var(--down)}
+.imf-ei-verdict.neu{color:var(--gold)}
+
+/* ── Sector Analysis ─────────────────────────────────── */
+.sector-tabs-row{display:flex;gap:4px;flex-wrap:wrap;margin-bottom:16px;padding-bottom:14px;border-bottom:1px solid var(--border)}
+.sec-tab-btn{display:inline-flex;align-items:center;gap:6px;padding:7px 14px;border-radius:var(--radius);font-size:12.5px;font-weight:600;color:var(--text2);border:1px solid var(--border);transition:all .15s}
+.sec-tab-btn:hover{color:var(--text1);border-color:var(--border2)}
+.sec-tab-btn.active{color:var(--gold);border-color:var(--gold);background:var(--gold-bg)}
+.sector-pane{display:none}
+.sector-pane.active{display:grid;grid-template-columns:1fr 320px;gap:16px}
+.sec-main{display:flex;flex-direction:column;gap:14px}
+.sec-sidebar-box{display:flex;flex-direction:column;gap:14px}
+.sec-overview-bar{display:grid;grid-template-columns:repeat(5,1fr);gap:1px;background:var(--border);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.sec-ov-item{background:var(--bg2);padding:12px 14px;text-align:center}
+.sec-ov-label{font-size:10px;color:var(--text3);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px}
+.sec-ov-val{font-family:var(--mono);font-size:16px;font-weight:600}
+.sec-ov-sub{font-size:10px;color:var(--text2);margin-top:3px}
+.pol-impact-grid{display:grid;grid-template-columns:repeat(3,1fr);gap:10px}
+.pol-impact-card{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.pic-decision{font-size:11px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;margin-bottom:6px}
+.pic-text{font-size:12px;color:var(--text1);line-height:1.5;margin-bottom:8px}
+.pic-verdict{font-size:11.5px;font-weight:700;display:flex;align-items:center;gap:5px}
+.sec-stock-table{width:100%;border-collapse:collapse;background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.sec-stock-table th{padding:8px 12px;text-align:left;font-size:10.5px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em;background:var(--bg3);border-bottom:1px solid var(--border);border-right:1px solid var(--border)}
+.sec-stock-table th:last-child{border-right:none}
+.sec-stock-table td{padding:10px 12px;font-size:12.5px;border-bottom:1px solid rgba(30,45,66,.5);border-right:1px solid rgba(30,45,66,.3)}
+.sec-stock-table td:last-child{border-right:none}
+.sec-stock-table tr:last-child td{border-bottom:none}
+.sec-stock-table tr:hover td{background:rgba(255,255,255,.02)}
+.stocksense-pill{display:inline-block;padding:2px 8px;border-radius:3px;font-size:10.5px;font-weight:700}
+.ss-strong-buy{background:rgba(38,166,154,.2);color:var(--up);border:1px solid rgba(38,166,154,.3)}
+.ss-buy{background:rgba(38,166,154,.12);color:var(--up)}
+.ss-hold{background:var(--gold-bg);color:var(--gold)}
+.ss-sell{background:var(--down-bg);color:var(--down)}
+.sec-macro-box{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);padding:14px}
+.sec-macro-title{font-size:12px;font-weight:700;color:var(--text1);margin-bottom:10px;display:flex;align-items:center;gap:6px}
+.sec-macro-items{display:flex;flex-direction:column;gap:7px}
+.sec-macro-item{display:flex;align-items:flex-start;gap:8px;font-size:11.5px;line-height:1.4}
+.sec-macro-dot{width:6px;height:6px;border-radius:50%;flex-shrink:0;margin-top:4px}
+.sector-heatmap{display:grid;grid-template-columns:repeat(4,1fr);gap:2px}
+.sh-cell{padding:10px 8px;border-radius:4px;text-align:center;cursor:pointer;transition:opacity .15s}
+.sh-cell:hover{opacity:.8}
+.sh-name{font-size:10px;font-weight:700;letter-spacing:.04em;text-transform:uppercase;margin-bottom:3px}
+.sh-val{font-family:var(--mono);font-size:12px;font-weight:600}
+
+/* ── Footer ──────────────────────────────────────────── */
+footer{background:var(--bg2);border-top:1px solid var(--border);margin-top:32px;padding:40px 0 20px}
+.footer-inner{max-width:1520px;margin:0 auto;padding:0 20px}
+.footer-grid{display:grid;grid-template-columns:2.5fr 1fr 1fr 1fr 1fr;gap:32px;margin-bottom:36px}
+.footer-brand p{font-size:12.5px;color:var(--text2);margin:12px 0 16px;line-height:1.7;max-width:260px}
+.footer-col h5{font-size:10.5px;font-weight:700;letter-spacing:.1em;text-transform:uppercase;color:var(--text2);margin-bottom:14px}
+.footer-col ul{list-style:none;display:flex;flex-direction:column;gap:9px}
+.footer-col ul a{font-size:12.5px;color:var(--text2);transition:color .15s}
+.footer-col ul a:hover{color:var(--gold)}
+.footer-bottom{display:flex;justify-content:space-between;align-items:center;padding-top:20px;border-top:1px solid var(--border);font-size:11.5px;color:var(--text3)}
+.footer-links{display:flex;gap:16px}
+.footer-links a{color:var(--text3);transition:color .15s}
+.footer-links a:hover{color:var(--text2)}
+.disclaimer{font-size:11px;color:var(--text3);line-height:1.6;background:rgba(239,83,80,.05);border:1px solid rgba(239,83,80,.15);border-radius:4px;padding:10px 14px;margin-bottom:24px}
+.social-row{display:flex;gap:8px;margin-top:12px}
+.soc-btn{width:28px;height:28px;border-radius:4px;background:var(--bg3);border:1px solid var(--border);display:flex;align-items:center;justify-content:center;font-size:12px;color:var(--text2);transition:all .15s}
+.soc-btn:hover{border-color:var(--gold);color:var(--gold)}
+
+/* ── Panel generic ───────────────────────────────────── */
+.panel{background:var(--bg2);border:1px solid var(--border);border-radius:var(--radius);overflow:hidden}
+.panel-header{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;border-bottom:1px solid var(--border);background:var(--bg3)}
+.panel-title{font-size:13px;font-weight:700;color:var(--text1)}
+.panel-body{padding:14px 16px}
+
+/* ── Responsive ──────────────────────────────────────── */
+@media(max-width:1100px){
+  .re-grid,.policy-layout,.imf-layout{grid-template-columns:1fr}
+  .sector-pane.active{grid-template-columns:1fr}
+  .page-wrap{grid-template-columns:1fr}
+  .sidebar-col{position:static}
+  .index-cards{grid-template-columns:repeat(3,1fr)}
+  .future-pol-grid{grid-template-columns:repeat(2,1fr)}
+  .imf-macro-grid{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:900px){
+  .re-price-grid{grid-template-columns:repeat(2,1fr)}
+  .pol-impact-grid{grid-template-columns:1fr 1fr}
+  .sec-overview-bar{grid-template-columns:repeat(3,1fr)}
+  .imf-review{grid-template-columns:40px 1fr 90px}
+  .future-pol-grid{grid-template-columns:1fr}
+  .imf-macro-grid{grid-template-columns:1fr 1fr}
+}
+@media(max-width:768px){
+  .index-cards{grid-template-columns:repeat(2,1fr)}
+  .news-featured{grid-template-columns:1fr}
+  .news-grid-row{grid-template-columns:1fr}
+  .footer-grid{grid-template-columns:1fr 1fr}
+  .asset-tabs{overflow-x:auto}
+  .sector-heatmap{grid-template-columns:repeat(2,1fr)}
+}
+@media(max-width:480px){
+  .index-cards{grid-template-columns:1fr 1fr}
+  .nav-search{display:none}
+  .nav-menu{display:none}
+}
+</style>
+</head>
+<body>
+
+<!-- ══ UTILITY BAR ══ -->
+<div class="utility-bar">
+  <div class="inner">
+    <div class="util-left">
+      <span class="live-dot"></span>
+      <a class="util-link" href="#">CSE Open 10:30–14:30 IST</a>
+      <span class="util-badge">🇱🇰 LK</span>
+      <a class="util-link" href="#">English</a>
+      <a class="util-link" href="#">සිංහල</a>
+      <a class="util-link" href="#">தமிழ்</a>
+    </div>
+    <div class="util-right">
+      <a class="util-link" href="#">📱 Mobile App</a>
+      <a class="util-link" href="#">Portfolio</a>
+      <a class="util-link" href="#">Alerts</a>
+      <a class="util-link" href="#">Help</a>
+    </div>
+  </div>
+</div>
+
+<!-- ══ MAIN NAVIGATION ══ -->
+<nav class="main-nav">
+  <div class="nav-inner">
+    <a class="logo" href="#">
+      <div class="logo-icon">⚡</div>
+      <div class="logo-name">CSE <span>Pulse</span></div>
+    </a>
+    <div class="nav-menu">
+      <a class="nav-item active" href="#markets">Markets</a>
+      <a class="nav-item" href="#news">News</a>
+      <a class="nav-item" href="#stocksense">Stock Sense LK</a>
+      <a class="nav-item" href="#economy">Economy</a>
+      <a class="nav-item" href="#">Screener</a>
+      <a class="nav-item" href="#">Portfolio</a>
+      <div class="nav-divider"></div>
+      <a class="nav-item new-badge" href="#realestate">Real Estate</a>
+      <a class="nav-item new-badge" href="#policyhub">Policy Hub</a>
+      <a class="nav-item new-badge" href="#imftracker">IMF Tracker</a>
+      <a class="nav-item new-badge" href="#sectoranalysis">Sectors</a>
+      <div class="nav-divider"></div>
+      <a class="nav-item" href="#">Brokers</a>
+      <a class="nav-item" href="#">Academy</a>
+    </div>
+    <div class="nav-search">
+      <span class="search-icon">🔍</span>
+      <input type="text" placeholder="Search stocks, indices…" id="globalSearch"/>
+    </div>
+    <div class="nav-actions">
+      <a class="btn btn-outline" href="#">Sign In</a>
+      <a class="btn btn-gold" href="#">Start Free →</a>
+    </div>
+  </div>
+</nav>
+
+<!-- ══ TICKER TAPE ══ -->
+<div class="ticker-tape">
+  <div class="ticker-label">🇱🇰 Live</div>
+  <div class="ticker-scroll">
+    <div class="ticker-track" id="tickerTrack"></div>
+  </div>
+</div>
+
+<!-- ══ INDEX OVERVIEW CARDS ══ -->
+<div class="index-bar" id="markets">
+  <div class="index-cards">
+    <div class="idx-card active" data-idx="aspi">
+      <div class="idx-top"><div class="idx-name">All Share Price Index</div><div class="idx-flag">🇱🇰</div></div>
+      <div class="idx-val up" id="iv-aspi">12,847.35</div>
+      <div class="idx-chg up" id="ic-aspi">▲ 157.42 (+1.24%)</div>
+      <div class="idx-mini"><canvas id="m-aspi"></canvas></div>
+    </div>
+    <div class="idx-card" data-idx="sl20">
+      <div class="idx-top"><div class="idx-name">S&P Sri Lanka 20</div><div class="idx-flag">🇱🇰</div></div>
+      <div class="idx-val up" id="iv-sl20">4,218.90</div>
+      <div class="idx-chg up" id="ic-sl20">▲ 52.14 (+1.25%)</div>
+      <div class="idx-mini"><canvas id="m-sl20"></canvas></div>
+    </div>
+    <div class="idx-card">
+      <div class="idx-top"><div class="idx-name">USD / LKR</div><div class="idx-flag">💱</div></div>
+      <div class="idx-val gold" id="iv-lkr">298.45</div>
+      <div class="idx-chg up" id="ic-lkr">▼ 0.35 (−0.12%)</div>
+      <div class="idx-mini"><canvas id="m-lkr"></canvas></div>
+    </div>
+    <div class="idx-card">
+      <div class="idx-top"><div class="idx-name">Gold (USD/oz)</div><div class="idx-flag">🥇</div></div>
+      <div class="idx-val gold">3,322.40</div>
+      <div class="idx-chg up">▲ 18.60 (+0.56%)</div>
+      <div class="idx-mini"><canvas id="m-gold"></canvas></div>
+    </div>
+    <div class="idx-card">
+      <div class="idx-top"><div class="idx-name">SL 10Y Bond Yield</div><div class="idx-flag">🏦</div></div>
+      <div class="idx-val">11.42%</div>
+      <div class="idx-chg down">▼ 0.08% (−0.70%)</div>
+      <div class="idx-mini"><canvas id="m-bond"></canvas></div>
+    </div>
+  </div>
+</div>
+
+<!-- ══ PAGE CONTENT ══ -->
+<div class="page-wrap">
+  <div class="main-col">
+
+    <!-- Asset Class Tabs -->
+    <div class="asset-tabs" id="assetTabs">
+      <button class="asset-tab active" data-tab="stocks">📈 Stocks</button>
+      <button class="asset-tab" data-tab="indices">📊 Indices</button>
+      <button class="asset-tab" data-tab="forex">💱 Forex</button>
+      <button class="asset-tab" data-tab="commodities">🥇 Commodities</button>
+      <button class="asset-tab" data-tab="crypto">₿ Crypto</button>
+      <button class="asset-tab" data-tab="bonds">🏦 Bonds</button>
+      <button class="asset-tab" data-tab="etfs">🗂 ETFs</button>
+    </div>
+
+    <!-- Data Table -->
+    <div class="data-table-wrap">
+      <div class="table-toolbar">
+        <span class="toolbar-count" id="tableCount">Showing 10 of 308 stocks</span>
+        <button class="filter-btn active">All</button>
+        <button class="filter-btn">Banking</button>
+        <button class="filter-btn">Hotels</button>
+        <button class="filter-btn">Holdings</button>
+        <button class="filter-btn">Plantations</button>
+        <div class="toolbar-search">🔍&nbsp;<input type="text" placeholder="Filter stocks…" id="tableFilter"/></div>
+      </div>
+      <div style="overflow-x:auto">
+        <table class="dt" id="mainTable">
+          <thead>
+            <tr>
+              <th style="width:20px"></th>
+              <th class="sorted" data-col="sym">Symbol <span class="sort-icon">▼</span></th>
+              <th data-col="price">Last <span class="sort-icon">↕</span></th>
+              <th data-col="chg">Chg% <span class="sort-icon">↕</span></th>
+              <th data-col="chgabs">Chg <span class="sort-icon">↕</span></th>
+              <th>High</th><th>Low</th>
+              <th data-col="vol">Volume <span class="sort-icon">↕</span></th>
+              <th data-col="cap">Mkt Cap <span class="sort-icon">↕</span></th>
+              <th data-col="pe">P/E <span class="sort-icon">↕</span></th>
+              <th>Stock Sense™</th>
+              <th>7D Chart</th>
+            </tr>
+          </thead>
+          <tbody id="tableBody"></tbody>
+        </table>
+      </div>
+      <div style="display:flex;align-items:center;justify-content:space-between;padding:10px 14px;border-top:1px solid var(--border);background:var(--bg3)">
+        <span style="font-size:11.5px;color:var(--text2)">Showing 10 of 308 CSE-listed stocks</span>
+        <a href="#" class="view-more" style="font-size:12px">View all 308 stocks →</a>
+      </div>
+    </div>
+
+    <!-- Main Chart Panel -->
+    <div class="chart-panel">
+      <div class="chart-header">
+        <div class="chart-index-selector">
+          <button class="cis-btn active">ASPI</button>
+          <button class="cis-btn">S&P SL20</button>
+          <button class="cis-btn">JKH</button>
+          <button class="cis-btn">COMB</button>
+        </div>
+        <div class="chart-stat">
+          <div class="cv up">12,847.35</div>
+          <div class="cc up">▲ 157.42 (+1.24%)</div>
+        </div>
+        <div class="time-btns">
+          <button class="time-btn">1H</button>
+          <button class="time-btn active">1D</button>
+          <button class="time-btn">1W</button>
+          <button class="time-btn">1M</button>
+          <button class="time-btn">3M</button>
+          <button class="time-btn">1Y</button>
+          <button class="time-btn">5Y</button>
+        </div>
+      </div>
+      <div class="chart-body"><canvas id="mainChart" height="200"></canvas></div>
+    </div>
+
+    <!-- News Panel -->
+    <div class="news-panel" id="news">
+      <div class="news-tabs">
+        <button class="news-tab active">Latest News</button>
+        <button class="news-tab">Market Moving</button>
+        <button class="news-tab">CSE Filings</button>
+        <button class="news-tab">Policy & Economy</button>
+        <button class="news-tab">Real Estate</button>
+      </div>
+      <div class="news-featured">
+        <div class="news-hero">
+          <div class="news-hero-tag tag-bull">🟢 BULLISH</div>
+          <h2>IMF Completes 5th Review — $350M Tranche Disbursed as SL Hits Primary Surplus Target</h2>
+          <p>The IMF Executive Board completed Sri Lanka's fifth review under the Extended Fund Facility, approving a $350M disbursement after the country achieved a primary surplus ahead of schedule. Bond yields fell 18bps on the news.</p>
+          <div class="news-meta">
+            <span class="news-source">IMF Press Release</span>
+            <span>2h ago</span>
+            <span class="news-stocksense">🧠 Market Impact: Strongly Positive</span>
+          </div>
+        </div>
+        <div class="news-list-side">
+          <div class="news-list-item">
+            <span class="nli-icon">🏨</span>
+            <div class="nli-content">
+              <h4>JKH Tourism Segment Revenue Projected at LKR 22B in FY2025 on Record Arrivals</h4>
+              <div class="nli-meta"><span class="news-source">Daily Mirror</span><span>4h ago</span><span class="news-hero-tag tag-bull" style="padding:1px 6px;font-size:9px;margin:0">🟢</span></div>
+            </div>
+          </div>
+          <div class="news-list-item">
+            <span class="nli-icon">🏦</span>
+            <div class="nli-content">
+              <h4>Sampath Bank Q1 Net Profit +28% — NII Growth Driven by Lower Funding Costs</h4>
+              <div class="nli-meta"><span class="news-source">CSE Filing</span><span>12h ago</span><span class="news-hero-tag tag-bull" style="padding:1px 6px;font-size:9px;margin:0">🟢</span></div>
+            </div>
+          </div>
+          <div class="news-list-item">
+            <span class="nli-icon">🏘️</span>
+            <div class="nli-content">
+              <h4>Port City Colombo Phase 2 Sales Open — Mixed Commercial Units from USD 850/sqft</h4>
+              <div class="nli-meta"><span class="news-source">Economy Next</span><span>1d ago</span><span class="news-hero-tag tag-neutral" style="padding:1px 6px;font-size:9px;margin:0">⚖️</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+      <div class="news-grid-row">
+        <div class="news-grid-item">
+          <div class="ngi-tag tag-bull">🟢 Hotels</div>
+          <div class="ngi-title">Tourist arrivals hit 2.1M milestone — Hotels & Leisure sector on track for record FY2025</div>
+          <div class="ngi-meta">Daily Mirror · 1d ago</div>
+        </div>
+        <div class="news-grid-item">
+          <div class="ngi-tag tag-neutral" style="color:var(--gold)">⚖️ Regulatory</div>
+          <div class="ngi-title">SEC Launches Margin Trading Framework — New Rules to Take Effect Q3 2025</div>
+          <div class="ngi-meta">CSE Official · 1d ago</div>
+        </div>
+        <div class="news-grid-item">
+          <div class="ngi-tag" style="color:var(--blue)">🏗️ Real Estate</div>
+          <div class="ngi-title">Colombo 7 luxury apartment prices rise 18% YoY as foreign buyer interest returns</div>
+          <div class="ngi-meta">LBO · 2d ago</div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Economic Calendar -->
+    <div class="eco-section" id="economy">
+      <div class="sec-head" style="margin-bottom:12px">
+        <div><div class="sec-title">Sri Lanka Economic Calendar</div><div class="sec-subtitle">Upcoming macro events that move CSE markets</div></div>
+        <a href="#" class="view-more">Full Calendar →</a>
+      </div>
+      <div class="eco-panel">
+        <div class="eco-date-header">This Week — May 12–16, 2026</div>
+        <table class="eco-table">
+          <thead><tr><th>Date / Time</th><th>Country</th><th>Event</th><th>Impact</th><th>Previous</th><th>Forecast</th><th>Actual</th></tr></thead>
+          <tbody>
+            <tr><td class="mono" style="font-size:11px">Mon 12 · 09:30</td><td><div class="eco-country">🇱🇰 Sri Lanka</div></td><td class="eco-event">CBSL Monthly Economic Indicators</td><td><span class="imp-high">●●● High</span></td><td class="eco-val">—</td><td class="eco-val">—</td><td class="eco-val eco-actual positive">Released</td></tr>
+            <tr><td class="mono" style="font-size:11px">Tue 13 · 10:00</td><td><div class="eco-country">🇱🇰 Sri Lanka</div></td><td class="eco-event">Colombo Tea Auction — Weekly Prices</td><td><span class="imp-high">●●● High</span></td><td class="eco-val gold">LKR 1,240/kg</td><td class="eco-val">—</td><td class="eco-val eco-actual positive">LKR 1,414/kg</td></tr>
+            <tr><td class="mono" style="font-size:11px">Wed 14 · 08:00</td><td><div class="eco-country">🇱🇰 Sri Lanka</div></td><td class="eco-event">CCPI Inflation (April 2026)</td><td><span class="imp-high">●●● High</span></td><td class="eco-val">4.5%</td><td class="eco-val">4.1%</td><td class="eco-val eco-actual positive">4.2%</td></tr>
+            <tr><td class="mono" style="font-size:11px">Thu 15 · 09:00</td><td><div class="eco-country">🇱🇰 Sri Lanka</div></td><td class="eco-event">Foreign Exchange Reserves (April)</td><td><span class="imp-high">●●● High</span></td><td class="eco-val">$5.4B</td><td class="eco-val">$5.5B</td><td class="eco-val eco-actual positive">$5.6B</td></tr>
+            <tr><td class="mono" style="font-size:11px">Fri 16 · 09:30</td><td><div class="eco-country">🇱🇰 Sri Lanka</div></td><td class="eco-event">Tourist Arrivals (April 2026)</td><td><span class="imp-med">●● Med</span></td><td class="eco-val">186,420</td><td class="eco-val">195,000</td><td class="eco-val" style="color:var(--text2)">Pending</td></tr>
+          </tbody>
+        </table>
+        <div class="eco-date-header" style="margin-top:0">Next Week — May 19–23, 2026</div>
+        <table class="eco-table">
+          <tbody>
+            <tr><td class="mono" style="font-size:11px">Mon 19 · 10:00</td><td><div class="eco-country">🇱🇰 Sri Lanka</div></td><td class="eco-event">CBSL Policy Rate Decision</td><td><span class="imp-high">●●● High</span></td><td class="eco-val">8.00%</td><td class="eco-val gold">7.75%</td><td class="eco-val" style="color:var(--text3)">—</td></tr>
+            <tr><td class="mono" style="font-size:11px">Wed 21 · 09:00</td><td><div class="eco-country">🇱🇰 Sri Lanka</div></td><td class="eco-event">GDP Growth Q1 2026 (Advance)</td><td><span class="imp-high">●●● High</span></td><td class="eco-val">4.5%</td><td class="eco-val">5.1%</td><td class="eco-val" style="color:var(--text3)">—</td></tr>
+            <tr><td class="mono" style="font-size:11px">Fri 23 · All Day</td><td><div class="eco-country">🇱🇰 Sri Lanka</div></td><td class="eco-event">IMF Programme — 6th &amp; Final Review</td><td><span class="imp-high">●●● High</span></td><td class="eco-val">5/6 done</td><td class="eco-val gold">6/6</td><td class="eco-val" style="color:var(--text3)">—</td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+
+  </div><!-- /main-col -->
+
+  <!-- SIDEBAR -->
+  <div class="sidebar-col">
+    <div class="sidebar-widget">
+      <div class="sw-header"><div class="sw-title">Market Status</div><span style="font-size:10.5px;color:var(--text2)">CSE · LKR</span></div>
+      <div class="mkt-status">
+        <div class="mkt-status-badge mkt-open"><span class="live-dot"></span> Open</div>
+        <div style="font-size:11.5px;color:var(--text2);margin-bottom:8px">Closes in <strong class="mono" style="color:var(--text1)" id="closeTimer">02:14:38</strong> · Mon–Fri 10:30–14:30 IST</div>
+        <div class="mkt-stat-grid">
+          <div class="mkt-stat-item"><div class="msl">Turnover</div><div class="msv">LKR 4.2B</div></div>
+          <div class="mkt-stat-item"><div class="msl">Volume</div><div class="msv">128.4M</div></div>
+          <div class="mkt-stat-item"><div class="msl">Trades</div><div class="msv">14,280</div></div>
+          <div class="mkt-stat-item"><div class="msl">Mkt Cap</div><div class="msv">LKR 3.8T</div></div>
+        </div>
+        <div style="margin-top:12px;font-size:11px;color:var(--text2);margin-bottom:4px">Advances / Declines / Unchanged</div>
+        <div class="adv-bar"><div class="adv-up" style="width:58%"></div><div class="adv-neutral" style="width:14%"></div><div class="adv-down" style="width:28%"></div></div>
+        <div class="adv-labels"><span class="al-up">↑ 142</span><span class="al-n">— 34</span><span class="al-down">↓ 70</span></div>
+      </div>
+    </div>
+
+    <div class="sidebar-widget" id="stocksense">
+      <div class="sw-header"><div class="sw-title">🧠 Stock Sense LK — AI Analyst</div><span class="sw-link">Full Terminal →</span></div>
+      <div class="stocksense-chat" id="stocksenseChat">
+        <div class="stocksense-msg">
+          <div class="stocksense-avatar">AI</div>
+          <div class="stocksense-bubble">Hi! I'm Stock Sense LK. Ask me anything about CSE stocks, real estate, IMF policy, or sector trends. Try: "How does IMF affect hotels?" 🇱🇰</div>
+        </div>
+      </div>
+      <div class="stocksense-input-row">
+        <input class="stocksense-input" id="sideAiInput" type="text" placeholder="Ask about any stock, policy, or sector…"/>
+        <button class="stocksense-send" onclick="sideAiQuery()">→</button>
+      </div>
+    </div>
+
+    <div class="sidebar-widget">
+      <div class="sw-header"><div class="sw-title">🔥 Most Visited Today</div><a href="#" class="sw-link">See all</a></div>
+      <div class="mv-list" id="mvList"></div>
+    </div>
+
+    <div class="sidebar-widget">
+      <div class="sw-header"><div class="sw-title">📐 Technical Summary — ASPI</div><span style="font-size:10.5px;color:var(--text2)">Daily</span></div>
+      <div class="tech-gauge">
+        <div class="gauge-wrap"><canvas id="gaugeChart" width="140" height="80"></canvas></div>
+        <div class="gauge-label-row"><span class="down">Sell</span><span style="color:var(--text2)">Neutral</span><span class="up">Buy</span></div>
+        <div class="gauge-value up">Strong Buy</div>
+        <div style="font-size:11px;color:var(--text2);margin-top:4px">Based on 26 indicators</div>
+        <div class="tech-breakdown">
+          <div class="tb-item"><div class="tb-count tb-sell">4</div><div class="tb-label">Sell</div></div>
+          <div class="tb-item"><div class="tb-count tb-neutral">5</div><div class="tb-label">Neutral</div></div>
+          <div class="tb-item"><div class="tb-count tb-buy">17</div><div class="tb-label">Buy</div></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-widget">
+      <div class="sw-header"><div class="sw-title">🇱🇰 Recovery Tracker</div><span class="util-badge" style="font-size:9px">EXCLUSIVE</span></div>
+      <div class="recovery-sidebar">
+        <div class="recovery-score">
+          <div><div class="rs-label">Recovery Index Score</div><div class="rs-bar" style="width:140px;margin-top:6px"><div class="rs-fill"></div></div><div style="font-size:10px;color:var(--text2);margin-top:3px">vs 12/100 in Jun 2022</div></div>
+          <div class="rs-value">74</div>
+        </div>
+        <div class="recovery-metrics">
+          <div class="rm-item"><span class="rm-label">🏦 Forex Reserves</span><span class="rm-val up">$5.6B</span></div>
+          <div class="rm-item"><span class="rm-label">📊 GDP Growth</span><span class="rm-val up">+4.8%</span></div>
+          <div class="rm-item"><span class="rm-label">📉 Inflation (CCPI)</span><span class="rm-val up">4.2%</span></div>
+          <div class="rm-item"><span class="rm-label">✈️ Tourist Arrivals</span><span class="rm-val up">2.1M</span></div>
+          <div class="rm-item"><span class="rm-label">🏛️ IMF Programme</span><span class="rm-val gold">5/6 Reviews</span></div>
+          <div class="rm-item"><span class="rm-label">⚡ Power Cuts</span><span class="rm-val up">0hrs/day</span></div>
+        </div>
+        <a href="#imftracker" style="display:block;text-align:center;margin-top:10px;font-size:12px;color:var(--gold)">Full IMF Tracker →</a>
+      </div>
+    </div>
+
+    <div class="sidebar-widget">
+      <div class="sw-header"><div class="sw-title">📅 Next Events</div><a href="#economy" class="sw-link">Full Calendar</a></div>
+      <div id="miniCalendar" style="padding:8px 0"></div>
+    </div>
+
+    <!-- RE Sidebar Widget -->
+    <div class="sidebar-widget">
+      <div class="sw-header"><div class="sw-title">🏘️ RE Price Flash</div><a href="#realestate" class="sw-link">Full Report →</a></div>
+      <div style="padding:12px">
+        <div style="display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:var(--bg3);border-radius:4px;border:1px solid var(--border)">
+            <div><div style="font-size:11px;font-weight:700;color:var(--text1)">Col. 7 Condo</div><div style="font-size:10px;color:var(--text3)">Avg/sqft</div></div>
+            <div style="text-align:right"><div class="mono" style="font-size:13px;font-weight:600">LKR 42,500</div><div class="mono up" style="font-size:10.5px">▲ +18.2% YoY</div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:var(--bg3);border-radius:4px;border:1px solid var(--border)">
+            <div><div style="font-size:11px;font-weight:700;color:var(--text1)">Port City</div><div style="font-size:10px;color:var(--text3)">USD/sqft</div></div>
+            <div style="text-align:right"><div class="mono" style="font-size:13px;font-weight:600">USD 850</div><div class="mono gold" style="font-size:10.5px">🏙️ Presale</div></div>
+          </div>
+          <div style="display:flex;justify-content:space-between;align-items:center;padding:6px 8px;background:var(--bg3);border-radius:4px;border:1px solid var(--border)">
+            <div><div style="font-size:11px;font-weight:700;color:var(--text1)">Rental Yield</div><div style="font-size:10px;color:var(--text3)">Col. 3 Commercial</div></div>
+            <div style="text-align:right"><div class="mono" style="font-size:13px;font-weight:600">7.8%</div><div class="mono up" style="font-size:10.5px">▲ vs 6.1% 2022</div></div>
+          </div>
+        </div>
+      </div>
+    </div>
+
+  </div><!-- /sidebar-col -->
+</div><!-- /page-wrap -->
+
+<!-- ════════════════════════════════════════════════════
+     REAL ESTATE SECTION
+════════════════════════════════════════════════════ -->
+<hr class="section-divider"/>
+<div style="background:var(--bg2);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0" id="realestate">
+  <div style="max-width:1520px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,rgba(61,133,200,.3),rgba(61,133,200,.1));border:1px solid rgba(61,133,200,.3);display:flex;align-items:center;justify-content:center;font-size:16px">🏢</div>
+      <div><div style="font-size:18px;font-weight:700;color:var(--text1)">Sri Lanka Real Estate Index</div><div style="font-size:12px;color:var(--text2);margin-top:2px">Residential · Commercial · Land · Port City · REITs & Developer Stocks</div></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <span style="padding:4px 12px;border-radius:20px;background:rgba(38,166,154,.12);border:1px solid rgba(38,166,154,.25);color:var(--up);font-size:11px;font-weight:700">🟢 Market: Recovering</span>
+      <a href="#" class="btn btn-outline" style="font-size:11.5px">Full RE Dashboard →</a>
+    </div>
+  </div>
+</div>
+
+<div class="full-section">
+  <div class="re-grid">
+    <div class="re-main">
+
+      <!-- Price Grid -->
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Property Price Index — Key Markets</div><div class="sec-subtitle">Average asking prices per sq.ft · Updated May 2026</div></div><a href="#" class="view-more">All Districts →</a></div>
+        <div class="re-price-grid">
+          <div class="re-price-card">
+            <div class="re-area">Colombo 7 (Cinnamon Gardens)</div>
+            <span class="re-type-badge re-badge-condo">Luxury Condo</span>
+            <div class="re-price">LKR 42,500</div>
+            <div class="re-unit">per sq.ft · Asking</div>
+            <div class="re-chg up">▲ +18.2% YoY</div>
+            <div class="re-yield">Gross Yield: 5.8% · Rental: LKR 210/sqft/mo</div>
+          </div>
+          <div class="re-price-card">
+            <div class="re-area">Colombo 3 (Kollupitiya)</div>
+            <span class="re-type-badge re-badge-comm">Commercial Office</span>
+            <div class="re-price">LKR 38,000</div>
+            <div class="re-unit">per sq.ft · Asking</div>
+            <div class="re-chg up">▲ +12.4% YoY</div>
+            <div class="re-yield">Gross Yield: 7.8% · Grade A office recovering</div>
+          </div>
+          <div class="re-price-card">
+            <div class="re-area">Port City Colombo</div>
+            <span class="re-type-badge re-badge-condo">Mixed Dev.</span>
+            <div class="re-price">USD 850</div>
+            <div class="re-unit">per sq.ft · Phase 2 Presale</div>
+            <div class="re-chg gold">● Presale Open</div>
+            <div class="re-yield">Special Economic Zone · USD-denominated leases</div>
+          </div>
+          <div class="re-price-card">
+            <div class="re-area">Galle Road Corridor</div>
+            <span class="re-type-badge re-badge-land">Land</span>
+            <div class="re-price">LKR 28M</div>
+            <div class="re-unit">per perch · Prime frontage</div>
+            <div class="re-chg up">▲ +22.0% YoY</div>
+            <div class="re-yield">High demand: Retail + F&B expansion</div>
+          </div>
+          <div class="re-price-card">
+            <div class="re-area">Kandy (Peradeniya)</div>
+            <span class="re-type-badge re-badge-condo">Residential</span>
+            <div class="re-price">LKR 12,800</div>
+            <div class="re-unit">per sq.ft · Mid-range</div>
+            <div class="re-chg up">▲ +9.1% YoY</div>
+            <div class="re-yield">University area: strong rental demand</div>
+          </div>
+          <div class="re-price-card">
+            <div class="re-area">Galle (Old Town Area)</div>
+            <span class="re-type-badge re-badge-villa">Heritage Villa</span>
+            <div class="re-price">LKR 18,500</div>
+            <div class="re-unit">per sq.ft · Restored</div>
+            <div class="re-chg up">▲ +31.0% YoY</div>
+            <div class="re-yield">Tourism-driven demand · Airbnb yields 11%+</div>
+          </div>
+          <div class="re-price-card">
+            <div class="re-area">Battaramulla (IT Park)</div>
+            <span class="re-type-badge re-badge-comm">Tech Office</span>
+            <div class="re-price">LKR 22,000</div>
+            <div class="re-unit">per sq.ft · Grade B+</div>
+            <div class="re-chg up">▲ +14.6% YoY</div>
+            <div class="re-yield">IT/BPO expansion driving occupancy</div>
+          </div>
+          <div class="re-price-card">
+            <div class="re-area">Negombo (Beach Road)</div>
+            <span class="re-type-badge re-badge-villa">Boutique Hotel</span>
+            <div class="re-price">LKR 6.5M</div>
+            <div class="re-unit">per perch · Beachfront</div>
+            <div class="re-chg up">▲ +27.4% YoY</div>
+            <div class="re-yield">Airport proximity · Tourism hotspot</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- RE vs Equity Comparison -->
+      <div class="re-vs-card">
+        <div class="re-vs-header"><div class="re-vs-title">Real Estate vs CSE Equity — 3-Year Return Comparison</div><span style="font-size:11px;color:var(--text2)">Post-crisis recovery (2023–2026)</span></div>
+        <div class="re-vs-stats">
+          <div class="re-vs-stat"><div class="rv up">+87.4%</div><div class="rl">ASPI Total Return</div></div>
+          <div class="re-vs-stat"><div class="rv up">+61.2%</div><div class="rl">Col. Prime RE</div></div>
+          <div class="re-vs-stat"><div class="rv gold">7.8%</div><div class="rl">Commercial Yield</div></div>
+        </div>
+        <div style="padding:14px 16px">
+          <canvas id="reVsEquityChart" height="130"></canvas>
+        </div>
+        <div style="padding:10px 16px;border-top:1px solid var(--border);background:var(--bg3);font-size:11.5px;color:var(--text2)">
+          📊 <strong style="color:var(--gold)">Stock Sense LK View:</strong> Equities still outperform on absolute returns. Real estate offers stability + USD exposure via Port City. Recommended allocation for recovery phase: 70% equities / 30% RE.
+        </div>
+      </div>
+
+      <!-- Hotspot Table -->
+      <div class="re-trend-card">
+        <div class="re-trend-header"><div class="re-trend-title">📍 Price Hotspots by District &amp; Type</div><span style="font-size:11px;color:var(--text2)">YoY change · Q1 2026</span></div>
+        <div class="re-hotspot-grid">
+          <div class="re-hs-item"><div class="re-hs-area">Colombo 01</div><div class="re-hs-type">Commercial Office</div><div class="re-hs-price">LKR 35,000/sqft</div><div class="re-hs-trend up">▲ +10.2%</div></div>
+          <div class="re-hs-item"><div class="re-hs-area">Colombo 02</div><div class="re-hs-type">Mixed Residential</div><div class="re-hs-price">LKR 28,000/sqft</div><div class="re-hs-trend up">▲ +15.8%</div></div>
+          <div class="re-hs-item"><div class="re-hs-area">Colombo 04</div><div class="re-hs-type">Luxury Apartment</div><div class="re-hs-price">LKR 38,500/sqft</div><div class="re-hs-trend up">▲ +20.1%</div></div>
+          <div class="re-hs-item"><div class="re-hs-area">Rajagiriya</div><div class="re-hs-type">Mid-range Condo</div><div class="re-hs-price">LKR 17,200/sqft</div><div class="re-hs-trend up">▲ +11.4%</div></div>
+          <div class="re-hs-item"><div class="re-hs-area">Maharagama</div><div class="re-hs-type">Suburban Land</div><div class="re-hs-price">LKR 4.8M/perch</div><div class="re-hs-trend up">▲ +8.9%</div></div>
+          <div class="re-hs-item"><div class="re-hs-area">Mount Lavinia</div><div class="re-hs-type">Beachfront Villa</div><div class="re-hs-price">LKR 22,000/sqft</div><div class="re-hs-trend up">▲ +24.3%</div></div>
+          <div class="re-hs-item"><div class="re-hs-area">Nawala</div><div class="re-hs-type">IT Hub Office</div><div class="re-hs-price">LKR 19,500/sqft</div><div class="re-hs-trend up">▲ +13.7%</div></div>
+          <div class="re-hs-item"><div class="re-hs-area">Moratuwa</div><div class="re-hs-type">Industrial</div><div class="re-hs-price">LKR 8,200/sqft</div><div class="re-hs-trend up">▲ +6.2%</div></div>
+          <div class="re-hs-item"><div class="re-hs-area">Mirissa</div><div class="re-hs-type">Tourism Villa</div><div class="re-hs-price">LKR 12,800/sqft</div><div class="re-hs-trend up">▲ +35.6%</div></div>
+        </div>
+      </div>
+
+    </div><!-- /re-main -->
+
+    <div class="re-sidebar">
+
+      <!-- CSE-listed RE Developers -->
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">🏗️ CSE-Listed RE Stocks</div><a href="#" class="sw-link" style="font-size:11px">See all →</a></div>
+        <div class="re-dev-list">
+          <div class="re-dev-item"><div class="re-dev-icon">🏙️</div><div class="re-dev-info"><div class="re-dev-name">John Keells Holdings</div><div class="re-dev-sym">JKH.N0000 · Real Estate + Hotels</div></div><div class="re-dev-price"><div class="re-dev-prc">198.50</div><div class="re-dev-chg up">+2.34%</div></div></div>
+          <div class="re-dev-item"><div class="re-dev-icon">🏢</div><div class="re-dev-info"><div class="re-dev-name">Overseas Realty (Ceylon)</div><div class="re-dev-sym">ORC.N0000 · Commercial RE</div></div><div class="re-dev-price"><div class="re-dev-prc">18.40</div><div class="re-dev-chg up">+1.66%</div></div></div>
+          <div class="re-dev-item"><div class="re-dev-icon">🏘️</div><div class="re-dev-info"><div class="re-dev-name">CT Holdings</div><div class="re-dev-sym">CTHR.N0000 · Property + Retail</div></div><div class="re-dev-price"><div class="re-dev-prc">147.50</div><div class="re-dev-chg up">+2.08%</div></div></div>
+          <div class="re-dev-item"><div class="re-dev-icon">🏗️</div><div class="re-dev-info"><div class="re-dev-name">Aitken Spence</div><div class="re-dev-sym">SPEN.N0000 · Hotels + Logistics</div></div><div class="re-dev-price"><div class="re-dev-prc">74.80</div><div class="re-dev-chg up">+1.22%</div></div></div>
+          <div class="re-dev-item"><div class="re-dev-icon">🌳</div><div class="re-dev-info"><div class="re-dev-name">Carson Cumberbatch</div><div class="re-dev-sym">CARS.N0000 · Property + Plantations</div></div><div class="re-dev-price"><div class="re-dev-prc">389.00</div><div class="re-dev-chg down">−1.27%</div></div></div>
+        </div>
+      </div>
+
+      <!-- Port City Card -->
+      <div class="re-portcity">
+        <div class="re-pc-title">🏙️ Port City Colombo — Special Economic Zone</div>
+        <div class="re-pc-grid">
+          <div class="re-pc-item"><div class="re-pc-label">Phase 2 Price</div><div class="re-pc-val gold">USD 850/sqft</div></div>
+          <div class="re-pc-item"><div class="re-pc-label">Total Area</div><div class="re-pc-val">269 hectares</div></div>
+          <div class="re-pc-item"><div class="re-pc-label">Tax Rate (SEZ)</div><div class="re-pc-val up">0%</div></div>
+          <div class="re-pc-item"><div class="re-pc-label">Completion</div><div class="re-pc-val gold">2027 ETA</div></div>
+          <div class="re-pc-item"><div class="re-pc-label">Currency</div><div class="re-pc-val">USD / Multi</div></div>
+          <div class="re-pc-item"><div class="re-pc-label">Approved Investors</div><div class="re-pc-val">47 companies</div></div>
+        </div>
+        <div style="margin-top:10px;font-size:11px;color:var(--text2);line-height:1.5">
+          📌 Zero income tax for 25 years for qualifying businesses. Foreign nationals permitted to own property in SEZ. Key catalyst for premium Colombo real estate.
+        </div>
+      </div>
+
+      <!-- RE Insights -->
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">💡 RE Market Insights</div></div>
+        <div class="re-insight-list">
+          <div class="re-insight-item"><div class="re-insight-icon">📈</div><div><div class="re-insight-text">IMF programme stability is unlocking foreign buyer appetite for Colombo prime property. Enquiries from UAE and Singapore investors up 340% YoY.</div><div class="re-insight-tag up">🟢 Positive Signal</div></div></div>
+          <div class="re-insight-item"><div class="re-insight-icon">⚠️</div><div><div class="re-insight-text">High mortgage rates (14–16%) still suppressing mid-market demand. CBSL rate cuts expected to unlock pent-up buyer demand in H2 2026.</div><div class="re-insight-tag gold">⚖️ Watch</div></div></div>
+          <div class="re-insight-item"><div class="re-insight-icon">🏖️</div><div><div class="re-insight-text">South coast (Galle–Mirissa–Weligama) seeing strongest price appreciation driven by boutique tourism property and Airbnb yields of 10–14%.</div><div class="re-insight-tag up">🟢 Hot Zone</div></div></div>
+          <div class="re-insight-item"><div class="re-insight-icon">🏗️</div><div><div class="re-insight-text">New condo completions in Colombo 2026: ~4,200 units. Absorption rate 68% — inventory tighter than 2019 peak.</div><div class="re-insight-tag up">🟢 Supply-Demand</div></div></div>
+        </div>
+      </div>
+
+    </div><!-- /re-sidebar -->
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     POLICY HUB
+════════════════════════════════════════════════════ -->
+<hr class="section-divider"/>
+<div style="background:rgba(201,168,76,.04);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0" id="policyhub">
+  <div style="max-width:1520px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,rgba(201,168,76,.3),rgba(201,168,76,.1));border:1px solid var(--gold-border);display:flex;align-items:center;justify-content:center;font-size:16px">🏛️</div>
+      <div><div style="font-size:18px;font-weight:700;color:var(--text1)">Government Policy Hub &amp; Sentiment Monitor</div><div style="font-size:12px;color:var(--text2);margin-top:2px">Cabinet decisions · Budget impact · CBSL rates · Regulatory changes · Market effect analysis</div></div>
+    </div>
+    <div style="display:flex;gap:8px">
+      <span style="padding:4px 12px;border-radius:20px;background:var(--gold-bg);border:1px solid var(--gold-border);color:var(--gold);font-size:11px;font-weight:700">⚖️ Sentiment: Cautiously Positive</span>
+    </div>
+  </div>
+</div>
+
+<div class="full-section">
+  <div class="policy-layout">
+    <div class="policy-main">
+
+      <!-- Policy Radar -->
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Policy Radar — Recent Government &amp; CBSL Decisions</div><div class="sec-subtitle">All decisions tracked with sector-level market impact</div></div><a href="#" class="view-more">Full Policy Archive →</a></div>
+        <div class="policy-radar">
+          <div class="pol-item">
+            <div class="pol-date">May 12, 2026</div>
+            <div><div class="pol-event">CBSL Holds Policy Rate at 8.00%</div><div class="pol-desc">Inflation below 5%; rate cut cycle to begin Q3 2026 per CBSL guidance</div></div>
+            <div><span class="pol-impact-pill imp-pos">🟢 Positive</span></div>
+            <div class="pol-sectors"><span class="pol-sec-tag">Banking</span><span class="pol-sec-tag">RE</span><span class="pol-sec-tag">Hotels</span></div>
+          </div>
+          <div class="pol-item">
+            <div class="pol-date">May 08, 2026</div>
+            <div><div class="pol-event">Cabinet Approves IT Export Incentive Extension</div><div class="pol-desc">0% tax on IT/BPO export income extended to 2030; FDI threshold lowered to USD 1M</div></div>
+            <div><span class="pol-impact-pill imp-pos">🟢 Positive</span></div>
+            <div class="pol-sectors"><span class="pol-sec-tag">IT/BPO</span><span class="pol-sec-tag">Telecom</span></div>
+          </div>
+          <div class="pol-item">
+            <div class="pol-date">May 02, 2026</div>
+            <div><div class="pol-event">Tourism VAT Reduced from 18% to 12%</div><div class="pol-desc">Measure to boost competitiveness vs Maldives and Thailand; effective July 1</div></div>
+            <div><span class="pol-impact-pill imp-pos">🟢 Positive</span></div>
+            <div class="pol-sectors"><span class="pol-sec-tag">Hotels</span><span class="pol-sec-tag">Leisure</span><span class="pol-sec-tag">RE</span></div>
+          </div>
+          <div class="pol-item">
+            <div class="pol-date">Apr 28, 2026</div>
+            <div><div class="pol-event">Fuel Price Formula Adjustment — Petrol +LKR 12</div><div class="pol-desc">IMF-mandated cost-reflective pricing; logistics sector facing margin pressure</div></div>
+            <div><span class="pol-impact-pill imp-neg">🔴 Negative</span></div>
+            <div class="pol-sectors"><span class="pol-sec-tag">Logistics</span><span class="pol-sec-tag">FMCG</span><span class="pol-sec-tag">Retail</span></div>
+          </div>
+          <div class="pol-item">
+            <div class="pol-date">Apr 22, 2026</div>
+            <div><div class="pol-event">Port City SEZ Phase 2 Investment Approvals</div><div class="pol-desc">47 companies approved; USD 2.1B committed investment; financial services hub on track</div></div>
+            <div><span class="pol-impact-pill imp-pos">🟢 Positive</span></div>
+            <div class="pol-sectors"><span class="pol-sec-tag">Banking</span><span class="pol-sec-tag">RE</span><span class="pol-sec-tag">Insurance</span></div>
+          </div>
+          <div class="pol-item">
+            <div class="pol-date">Apr 15, 2026</div>
+            <div><div class="pol-event">Import Tax Rationalization — Electronics &amp; Vehicles</div><div class="pol-desc">Mixed: consumer electronics cheaper; EV imports facilitated; ICE vehicle imports remain restricted</div></div>
+            <div><span class="pol-impact-pill imp-mix">Mixed</span></div>
+            <div class="pol-sectors"><span class="pol-sec-tag">Retail</span><span class="pol-sec-tag">Leasing</span><span class="pol-sec-tag">Telecom</span></div>
+          </div>
+          <div class="pol-item">
+            <div class="pol-date">Apr 10, 2026</div>
+            <div><div class="pol-event">SLFRS 17 Insurance Standard Implementation</div><div class="pol-desc">New insurance accounting standard; short-term P&amp;L volatility; long-term transparency positive</div></div>
+            <div><span class="pol-impact-pill imp-neu">⚖️ Neutral</span></div>
+            <div class="pol-sectors"><span class="pol-sec-tag">Insurance</span><span class="pol-sec-tag">Banking</span></div>
+          </div>
+          <div class="pol-item">
+            <div class="pol-date">Mar 28, 2026</div>
+            <div><div class="pol-event">Budget 2026 — Corporate Tax Adjustments</div><div class="pol-desc">Standard rate stays 30%; SME rate reduced to 14%; plantation company rate cut to 14%</div></div>
+            <div><span class="pol-impact-pill imp-mix">Mixed</span></div>
+            <div class="pol-sectors"><span class="pol-sec-tag">Plantations</span><span class="pol-sec-tag">SMEs</span><span class="pol-sec-tag">Banking</span></div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Future Policy Decisions & Economic Impact -->
+      <div>
+        <div class="sec-head"><div><div class="sec-title">🔮 Upcoming Policy Decisions &amp; Projected Market Impact</div><div class="sec-subtitle">Forward-looking analysis — decisions expected in next 90 days</div></div></div>
+        <div class="future-pol-grid">
+          <div class="fp-card high">
+            <div class="fp-timeline">🔴 HIGH IMPACT · Expected: May 19, 2026</div>
+            <div class="fp-title">CBSL Policy Rate Decision — Potential First Cut to 7.75%</div>
+            <div class="fp-body">If CBSL cuts by 25bps as signalled, this would be the first rate cut in this cycle. Inflation at 4.2% gives headroom. IMF Article IV consultation supports easing.</div>
+            <div class="fp-impacts">
+              <div class="fp-impact"><span class="fp-sector-tag">Banking</span><span class="fp-arrow neg">↓ NIM pressure, but credit growth +</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">Hotels</span><span class="fp-arrow pos">↑ Lower cost of debt, expansion</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">Real Estate</span><span class="fp-arrow pos">↑ Mortgage rates ease, demand +</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">ASPI</span><span class="fp-arrow pos">↑ Re-rating catalyst for equities</span></div>
+            </div>
+          </div>
+          <div class="fp-card high">
+            <div class="fp-timeline">🔴 HIGH IMPACT · Expected: May 23, 2026</div>
+            <div class="fp-title">IMF 6th &amp; Final Review Completion</div>
+            <div class="fp-body">Completion of the 4-year EFF programme marks Sri Lanka's full graduation from crisis mode. Final $300M tranche + potential new precautionary credit line being negotiated.</div>
+            <div class="fp-impacts">
+              <div class="fp-impact"><span class="fp-sector-tag">LKR</span><span class="fp-arrow pos">↑ Currency confidence, FX stability</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">Banking</span><span class="fp-arrow pos">↑ Sovereign rating upgrade likely</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">ASPI</span><span class="fp-arrow pos">↑ Foreign investor confidence surge</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">Bonds</span><span class="fp-arrow pos">↑ Yield compression expected</span></div>
+            </div>
+          </div>
+          <div class="fp-card med">
+            <div class="fp-timeline">🔵 MEDIUM IMPACT · Expected: June 2026</div>
+            <div class="fp-title">Eurobond Restructuring Final Settlement</div>
+            <div class="fp-body">ISB restructuring with international creditors expected to close Q2 2026. Terms include 30–35% NPV reduction. Clears path for new sovereign bond issuance post-2027.</div>
+            <div class="fp-impacts">
+              <div class="fp-impact"><span class="fp-sector-tag">Banking</span><span class="fp-arrow pos">↑ Sovereign risk premium falls</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">Insurance</span><span class="fp-arrow pos">↑ Gov't bond holdings repriced</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">LKR</span><span class="fp-arrow pos">↑ Debt sustainability restored</span></div>
+            </div>
+          </div>
+          <div class="fp-card med">
+            <div class="fp-timeline">🔵 MEDIUM IMPACT · Expected: July 2026</div>
+            <div class="fp-title">Tourism VAT Cut Implementation (12% from 18%)</div>
+            <div class="fp-body">Effective July 1. Will improve SL's price competitiveness vs Maldives. Combined with 2.5M arrival target for 2026, this is a structural tailwind for H&L sector.</div>
+            <div class="fp-impacts">
+              <div class="fp-impact"><span class="fp-sector-tag">JKH</span><span class="fp-arrow pos">↑ Direct hotel revenue benefit</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">HHL</span><span class="fp-arrow pos">↑ Healthcare + leisure tourism</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">SPEN</span><span class="fp-arrow pos">↑ Aitken Spence Hotels</span></div>
+            </div>
+          </div>
+          <div class="fp-card low">
+            <div class="fp-timeline">⚪ WATCH · Expected: Q3 2026</div>
+            <div class="fp-title">Digital Economy &amp; E-Commerce Policy Framework</div>
+            <div class="fp-body">New ICTA framework for digital payments, e-commerce licensing, and data localisation. Expected to formalise Sri Lanka's rapidly growing gig and digital economy sector.</div>
+            <div class="fp-impacts">
+              <div class="fp-impact"><span class="fp-sector-tag">IT/BPO</span><span class="fp-arrow pos">↑ Regulatory clarity unlocks FDI</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">Telecom</span><span class="fp-arrow neu">→ Mixed; data rules costly</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">Banking</span><span class="fp-arrow pos">↑ Digital payment volume +</span></div>
+            </div>
+          </div>
+          <div class="fp-card low">
+            <div class="fp-timeline">⚪ WATCH · Expected: H2 2026</div>
+            <div class="fp-title">Logistics Corridor — Trincomalee Port Expansion</div>
+            <div class="fp-body">Cabinet approval for USD 700M Trinco port expansion with Indian and Japanese backing. Positions SL as transshipment hub alongside Colombo Port, which handled 8M TEUs in 2025.</div>
+            <div class="fp-impacts">
+              <div class="fp-impact"><span class="fp-sector-tag">Logistics</span><span class="fp-arrow pos">↑ Major sector re-rating</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">Construction</span><span class="fp-arrow pos">↑ Major project pipeline</span></div>
+              <div class="fp-impact"><span class="fp-sector-tag">RE</span><span class="fp-arrow pos">↑ Trinco area land values</span></div>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Budget Impact Grid -->
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Budget 2026 — Sector Impact Matrix</div><div class="sec-subtitle">Key fiscal measures and their effect on CSE-listed companies</div></div></div>
+        <div class="budget-impact">
+          <div class="bi-item"><div class="bi-measure">Corporate Tax: Standard Rate Held at 30%</div><div class="bi-sector">Affects: All listed companies</div><div class="bi-verdict" style="color:var(--gold)">⚖️ Neutral — was 40% in 2022, stable now</div></div>
+          <div class="bi-item"><div class="bi-measure">SME Rate Cut to 14% (from 25%)</div><div class="bi-sector">Affects: Smaller listed companies, growth stocks</div><div class="bi-verdict" style="color:var(--up)">🟢 Positive — earnings uplift for smaller caps</div></div>
+          <div class="bi-item"><div class="bi-measure">Plantation Sector Rate Cut to 14%</div><div class="bi-sector">Affects: CARS, KLNR, LIOC, TEL</div><div class="bi-verdict" style="color:var(--up)">🟢 Positive — major earnings catalyst</div></div>
+          <div class="bi-item"><div class="bi-measure">Tourism VAT Reduced: 18% → 12%</div><div class="bi-sector">Affects: JKH, SPEN, AHUN, hotel companies</div><div class="bi-verdict" style="color:var(--up)">🟢 Strongly Positive — demand stimulant</div></div>
+          <div class="bi-item"><div class="bi-measure">Withholding Tax on Dividends: 15%</div><div class="bi-sector">Affects: All dividend-paying companies</div><div class="bi-verdict" style="color:var(--down)">🔴 Negative — reduces income investor appeal</div></div>
+          <div class="bi-item"><div class="bi-measure">Capital Gains Tax on CSE: 0% Maintained</div><div class="bi-sector">Affects: All equity investors</div><div class="bi-verdict" style="color:var(--up)">🟢 Strongly Positive — market competitive</div></div>
+          <div class="bi-item"><div class="bi-measure">Fuel Subsidy Removal Complete</div><div class="bi-sector">Affects: Logistics, FMCG, Retail, Transport</div><div class="bi-verdict" style="color:var(--down)">🔴 Negative — cost pressure on logistics</div></div>
+          <div class="bi-item"><div class="bi-measure">IT Export Income: 0% Tax to 2030</div><div class="bi-sector">Affects: CALT, IT/BPO exporters, tech sector</div><div class="bi-verdict" style="color:var(--up)">🟢 Strongly Positive — sector re-rating</div></div>
+        </div>
+      </div>
+
+    </div><!-- /policy-main -->
+
+    <div class="policy-sidebar-col">
+
+      <!-- Government Sentiment Score -->
+      <div class="sentiment-widget">
+        <div style="font-size:12.5px;font-weight:700;margin-bottom:12px;padding-bottom:10px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:6px">🧭 Government Sentiment Score</div>
+        <div class="gov-score-wrap">
+          <div class="gov-score-num gold">68</div>
+          <div style="font-size:11.5px;color:var(--gold);font-weight:600;margin-top:4px">Cautiously Positive</div>
+          <div class="gov-score-bar"><div class="gov-score-fill" style="width:68%;background:linear-gradient(90deg,var(--gold),var(--up))"></div></div>
+          <div style="font-size:10px;color:var(--text3)">Score: 0 = Hostile · 100 = Pro-Business</div>
+        </div>
+        <div class="gov-breakdown">
+          <div class="gov-dim"><div class="gov-dim-label">Fiscal Discipline</div><div class="gov-dim-bar"><div class="gov-dim-fill" style="width:80%;background:var(--up)"></div></div><div class="gov-dim-val up">80</div></div>
+          <div class="gov-dim"><div class="gov-dim-label">Tax Competitiveness</div><div class="gov-dim-bar"><div class="gov-dim-fill" style="width:62%;background:var(--gold)"></div></div><div class="gov-dim-val gold">62</div></div>
+          <div class="gov-dim"><div class="gov-dim-label">Foreign Investment</div><div class="gov-dim-bar"><div class="gov-dim-fill" style="width:74%;background:var(--up)"></div></div><div class="gov-dim-val up">74</div></div>
+          <div class="gov-dim"><div class="gov-dim-label">Regulatory Clarity</div><div class="gov-dim-bar"><div class="gov-dim-fill" style="width:58%;background:var(--gold)"></div></div><div class="gov-dim-val gold">58</div></div>
+          <div class="gov-dim"><div class="gov-dim-label">Labour Market Reform</div><div class="gov-dim-bar"><div class="gov-dim-fill" style="width:42%;background:var(--down)"></div></div><div class="gov-dim-val down">42</div></div>
+          <div class="gov-dim"><div class="gov-dim-label">SOE Reform Progress</div><div class="gov-dim-bar"><div class="gov-dim-fill" style="width:55%;background:var(--gold)"></div></div><div class="gov-dim-val gold">55</div></div>
+        </div>
+      </div>
+
+      <!-- CBSL Rate Timeline -->
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">🏦 CBSL Rate Cycle History</div></div>
+        <div class="rate-timeline">
+          <div class="rate-event"><div class="rate-date">Apr 2022</div><div class="rate-desc">Emergency hike — crisis peak</div><div class="rate-val down">15.50%</div></div>
+          <div class="rate-event"><div class="rate-date">Sep 2022</div><div class="rate-desc">Crisis peak maintained</div><div class="rate-val down">15.50%</div></div>
+          <div class="rate-event"><div class="rate-date">Jun 2023</div><div class="rate-desc">Cut cycle begins</div><div class="rate-val gold">12.00%</div></div>
+          <div class="rate-event"><div class="rate-date">Dec 2023</div><div class="rate-desc">Continued easing</div><div class="rate-val gold">10.00%</div></div>
+          <div class="rate-event"><div class="rate-date">Jun 2024</div><div class="rate-desc">Further normalization</div><div class="rate-val gold">9.00%</div></div>
+          <div class="rate-event"><div class="rate-date">Jan 2025</div><div class="rate-desc">Easing pause</div><div class="rate-val">8.50%</div></div>
+          <div class="rate-event"><div class="rate-date">Oct 2025</div><div class="rate-desc">Final 2025 cut</div><div class="rate-val">8.00%</div></div>
+          <div class="rate-event" style="background:rgba(201,168,76,.04);border-left:2px solid var(--gold)"><div class="rate-date" style="color:var(--gold)">May 2026</div><div class="rate-desc" style="font-weight:600">Current rate</div><div class="rate-val gold">8.00%</div></div>
+          <div class="rate-event" style="opacity:.6"><div class="rate-date">Q3 2026</div><div class="rate-desc">Forecast: first cut</div><div class="rate-val up">7.75%?</div></div>
+        </div>
+      </div>
+
+      <!-- Key Political Risk Factors -->
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">⚠️ Political Risk Monitor</div></div>
+        <div style="padding:12px;display:flex;flex-direction:column;gap:8px">
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(38,166,154,.06);border:1px solid rgba(38,166,154,.2);border-radius:4px">
+            <span style="font-size:16px">🟢</span>
+            <div><div style="font-size:12px;font-weight:700;color:var(--up)">Political Stability</div><div style="font-size:10.5px;color:var(--text2)">NPP govt majority; no election until 2029</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(201,168,76,.06);border:1px solid var(--gold-border);border-radius:4px">
+            <span style="font-size:16px">🟡</span>
+            <div><div style="font-size:12px;font-weight:700;color:var(--gold)">SOE Privatisation</div><div style="font-size:10.5px;color:var(--text2)">SriLankan Airlines, Srilankan Hotels — delayed</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(201,168,76,.06);border:1px solid var(--gold-border);border-radius:4px">
+            <span style="font-size:16px">🟡</span>
+            <div><div style="font-size:12px;font-weight:700;color:var(--gold)">Labour Reform</div><div style="font-size:10.5px;color:var(--text2)">Industrial Relations Act — union opposition</div></div>
+          </div>
+          <div style="display:flex;align-items:center;gap:8px;padding:8px 10px;background:rgba(239,83,80,.06);border:1px solid rgba(239,83,80,.2);border-radius:4px">
+            <span style="font-size:16px">🔴</span>
+            <div><div style="font-size:12px;font-weight:700;color:var(--down)">Brain Drain Risk</div><div style="font-size:10.5px;color:var(--text2)">Skilled emigration still elevated; IT talent shortage</div></div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /policy-sidebar -->
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     IMF TRACKER
+════════════════════════════════════════════════════ -->
+<hr class="section-divider"/>
+<div style="background:rgba(38,166,154,.03);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0" id="imftracker">
+  <div style="max-width:1520px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,rgba(38,166,154,.3),rgba(38,166,154,.1));border:1px solid rgba(38,166,154,.3);display:flex;align-items:center;justify-content:center;font-size:16px">🏛️</div>
+      <div><div style="font-size:18px;font-weight:700;color:var(--text1)">IMF Bailout Tracker &amp; Economic Impact Model</div><div style="font-size:12px;color:var(--text2);margin-top:2px">Extended Fund Facility (EFF) · 4-year programme · $3B approved · Conditions &amp; CSE implications</div></div>
+    </div>
+    <div style="display:flex;gap:8px;align-items:center">
+      <div style="text-align:right"><div style="font-size:11px;color:var(--text2)">Programme Progress</div><div style="font-family:var(--mono);font-size:22px;font-weight:700;color:var(--up)">5 / 6 Reviews ✓</div></div>
+    </div>
+  </div>
+</div>
+
+<div class="full-section">
+  <!-- Macro Targets -->
+  <div style="margin-bottom:16px">
+    <div class="sec-head"><div><div class="sec-title">IMF Programme Macro Targets vs Actuals</div><div class="sec-subtitle">Key performance indicators monitored each review</div></div></div>
+    <div class="imf-macro-grid">
+      <div class="imf-macro-card">
+        <div class="imc-label">Primary Balance</div>
+        <div class="imc-val up">+2.3%</div>
+        <div class="imc-target">IMF Target: +2.0% of GDP ✓</div>
+        <div class="imc-bar"><div class="imc-fill" style="width:92%;background:var(--up)"></div></div>
+        <div style="font-size:10px;color:var(--text3)">Exceeded target — critical milestone</div>
+      </div>
+      <div class="imf-macro-card">
+        <div class="imc-label">Forex Reserves</div>
+        <div class="imc-val up">$5.6B</div>
+        <div class="imc-target">IMF Target: $4.5B ✓</div>
+        <div class="imc-bar"><div class="imc-fill" style="width:85%;background:var(--up)"></div></div>
+        <div style="font-size:10px;color:var(--text3)">3.2 months import cover — ahead of plan</div>
+      </div>
+      <div class="imf-macro-card">
+        <div class="imc-label">Inflation (CCPI)</div>
+        <div class="imc-val up">4.2%</div>
+        <div class="imc-target">IMF Target: &lt;5% ✓</div>
+        <div class="imc-bar"><div class="imc-fill" style="width:78%;background:var(--up)"></div></div>
+        <div style="font-size:10px;color:var(--text3)">From 70% peak in Sep 2022</div>
+      </div>
+      <div class="imf-macro-card">
+        <div class="imc-label">GDP Growth</div>
+        <div class="imc-val up">+4.8%</div>
+        <div class="imc-target">IMF Target: +3.5% ✓</div>
+        <div class="imc-bar"><div class="imc-fill" style="width:88%;background:var(--up)"></div></div>
+        <div style="font-size:10px;color:var(--text3)">Q4 2025; Q1 2026 est. +5.1%</div>
+      </div>
+      <div class="imf-macro-card">
+        <div class="imc-label">Revenue/GDP Ratio</div>
+        <div class="imc-val gold">13.2%</div>
+        <div class="imc-target">IMF Target: 15% by 2027</div>
+        <div class="imc-bar"><div class="imc-fill" style="width:55%;background:var(--gold)"></div></div>
+        <div style="font-size:10px;color:var(--text3)">Improving but below target</div>
+      </div>
+      <div class="imf-macro-card">
+        <div class="imc-label">Debt/GDP</div>
+        <div class="imc-val gold">108%</div>
+        <div class="imc-target">IMF Target: &lt;95% by 2032</div>
+        <div class="imc-bar"><div class="imc-fill" style="width:45%;background:var(--gold)"></div></div>
+        <div style="font-size:10px;color:var(--text3)">On track but long-term concern</div>
+      </div>
+      <div class="imf-macro-card">
+        <div class="imc-label">SOE Reform</div>
+        <div class="imc-val gold">62%</div>
+        <div class="imc-target">IMF Target: Full restructuring</div>
+        <div class="imc-bar"><div class="imc-fill" style="width:62%;background:var(--gold)"></div></div>
+        <div style="font-size:10px;color:var(--text3)">CEB reform done; SriLankan delayed</div>
+      </div>
+      <div class="imf-macro-card">
+        <div class="imc-label">Total Disbursed</div>
+        <div class="imc-val up">$2.7B</div>
+        <div class="imc-target">Total Programme: $3.0B</div>
+        <div class="imc-bar"><div class="imc-fill" style="width:90%;background:linear-gradient(90deg,var(--up),var(--gold))"></div></div>
+        <div style="font-size:10px;color:var(--text3)">$300M final tranche pending review 6</div>
+      </div>
+    </div>
+  </div>
+
+  <div class="imf-layout">
+    <div class="imf-main">
+
+      <!-- IMF Review Timeline -->
+      <div>
+        <div class="sec-head"><div><div class="sec-title">EFF Programme Review Timeline</div></div></div>
+        <div class="imf-timeline">
+          <div style="display:grid;grid-template-columns:60px 1fr 120px 100px 90px;gap:14px;padding:9px 16px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:10.5px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">
+            <div>Review</div><div>Details &amp; Conditions</div><div>Amount</div><div>Status</div><div>Market Rx</div>
+          </div>
+          <div class="imf-review">
+            <div class="imf-rev-num">R1</div>
+            <div class="imf-rev-info"><div class="imf-rev-title">1st Review — Programme Initiation</div><div class="imf-rev-date">Mar 2023 · Completed</div><div class="imf-cond">Primary surplus commitment; CBSL independence; forex accumulation targets</div></div>
+            <div class="imf-rev-amount up">$330M</div>
+            <div><span class="imf-rev-status imf-done">✓ Completed</span></div>
+            <div style="font-size:11px;color:var(--up)">ASPI +8.4%</div>
+          </div>
+          <div class="imf-review">
+            <div class="imf-rev-num">R2</div>
+            <div class="imf-rev-info"><div class="imf-rev-title">2nd Review — Fiscal Consolidation</div><div class="imf-rev-date">Sep 2023 · Completed</div><div class="imf-cond">Revenue administration reform; SOE tariff restructuring; inflation trajectory</div></div>
+            <div class="imf-rev-amount up">$330M</div>
+            <div><span class="imf-rev-status imf-done">✓ Completed</span></div>
+            <div style="font-size:11px;color:var(--up)">ASPI +12.1%</div>
+          </div>
+          <div class="imf-review">
+            <div class="imf-rev-num">R3</div>
+            <div class="imf-rev-info"><div class="imf-rev-title">3rd Review — Structural Reforms</div><div class="imf-rev-date">Mar 2024 · Completed</div><div class="imf-cond">CEB electricity reform; banking sector stress tests; domestic debt restructuring</div></div>
+            <div class="imf-rev-amount up">$350M</div>
+            <div><span class="imf-rev-status imf-done">✓ Completed</span></div>
+            <div style="font-size:11px;color:var(--up)">ASPI +6.2%</div>
+          </div>
+          <div class="imf-review">
+            <div class="imf-rev-num">R4</div>
+            <div class="imf-rev-info"><div class="imf-rev-title">4th Review — Growth Phase Begins</div><div class="imf-rev-date">Sep 2024 · Completed</div><div class="imf-cond">External debt restructuring with bilateral creditors; revenue target overperformance</div></div>
+            <div class="imf-rev-amount up">$350M</div>
+            <div><span class="imf-rev-status imf-done">✓ Completed</span></div>
+            <div style="font-size:11px;color:var(--up)">ASPI +9.8%</div>
+          </div>
+          <div class="imf-review current">
+            <div class="imf-rev-num">R5</div>
+            <div class="imf-rev-info"><div class="imf-rev-title">5th Review — Programme Near Completion</div><div class="imf-rev-date">Mar 2026 · Completed</div><div class="imf-cond">ISB restructuring finalised; forex reserves $5.6B; primary surplus +2.3%; GDP growth beats target</div></div>
+            <div class="imf-rev-amount up">$350M</div>
+            <div><span class="imf-rev-status imf-done">✓ Completed</span></div>
+            <div style="font-size:11px;color:var(--up)">ASPI +7.4%</div>
+          </div>
+          <div class="imf-review upcoming">
+            <div class="imf-rev-num">R6</div>
+            <div class="imf-rev-info"><div class="imf-rev-title">6th &amp; Final Review — Programme Graduation</div><div class="imf-rev-date">May 23, 2026 · Upcoming</div><div class="imf-cond">Final fiscal benchmarks; debt sustainability review; new precautionary credit line (PCL) negotiations</div></div>
+            <div class="imf-rev-amount gold">$300M</div>
+            <div><span class="imf-rev-status imf-pending">⏳ Pending</span></div>
+            <div style="font-size:11px;color:var(--gold)">ASPI +?</div>
+          </div>
+        </div>
+        <div style="padding:12px 14px;background:var(--bg3);border:1px solid var(--border);border-top:none;border-radius:0 0 var(--radius) var(--radius)">
+          <div style="font-size:11px;color:var(--text2);margin-bottom:6px">Programme Disbursement Progress</div>
+          <div class="imf-progress-bar"><div class="imf-prog-fill" style="width:90%"></div></div>
+          <div style="display:flex;justify-content:space-between;font-size:10.5px;color:var(--text2)"><span>$0</span><span class="up">$2.71B disbursed</span><span style="color:var(--text3)">$3.0B total</span></div>
+        </div>
+      </div>
+
+      <!-- IMF Conditions → Economy → CSE Impact -->
+      <div>
+        <div class="sec-head"><div><div class="sec-title">IMF Conditions → Economy → CSE Market Impact Chain</div><div class="sec-subtitle">How each condition ripples from policy to sectors to stock prices</div></div></div>
+        <div class="imf-econ-impact">
+          <div style="display:grid;grid-template-columns:140px 1fr 90px;gap:14px;padding:8px 14px;background:var(--bg3);border-bottom:1px solid var(--border);font-size:10px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.05em">
+            <div>IMF Condition</div><div>Economy &amp; Sector Effect</div><div>CSE Impact</div>
+          </div>
+          <div class="imf-ei-item"><div class="imf-ei-condition">Primary Surplus Target</div><div class="imf-ei-economy">Government spends less than it earns → lower borrowing → bond yields fall → cheaper credit for companies → earnings expansion across all sectors</div><div class="imf-ei-verdict pos">🟢 ASPI +</div></div>
+          <div class="imf-ei-item"><div class="imf-ei-condition">Forex Reserve Buildup</div><div class="imf-ei-economy">LKR stability → import cost predictability → profit margins protected for importers/manufacturers; foreign investor confidence in LKR returns</div><div class="imf-ei-verdict pos">🟢 LKR +, FII +</div></div>
+          <div class="imf-ei-item"><div class="imf-ei-condition">Cost-Reflective Fuel Pricing</div><div class="imf-ei-economy">Fuel subsidies removed → CEB/Ceylon Petroleum profits normalise → logistics sector faces margin squeeze → consumer prices up modestly</div><div class="imf-ei-verdict neg">🔴 Logistics −</div></div>
+          <div class="imf-ei-item"><div class="imf-ei-condition">SOE Reform (CEB)</div><div class="imf-ei-economy">CEB tariff reform complete → power sector losses stop → banking sector's CEB loan exposure de-risked → credit quality improves</div><div class="imf-ei-verdict pos">🟢 Banks +</div></div>
+          <div class="imf-ei-item"><div class="imf-ei-condition">Revenue Administration</div><div class="imf-ei-economy">IRD modernisation → higher tax compliance → more informal businesses formalise → bank account growth → banking sector volumes +</div><div class="imf-ei-verdict pos">🟢 Banks +</div></div>
+          <div class="imf-ei-item"><div class="imf-ei-condition">Debt Restructuring</div><div class="imf-ei-economy">Sovereign debt overhang lifted → SL credit rating improves → risk premium on all SL assets falls → re-rating of equities and bonds</div><div class="imf-ei-verdict pos">🟢 All sectors +</div></div>
+          <div class="imf-ei-item"><div class="imf-ei-condition">Central Bank Independence</div><div class="imf-ei-economy">CBSL Act 2023 — monetary financing banned → monetary policy credibility → inflation anchored → rate normalisation → equity re-rating</div><div class="imf-ei-verdict pos">🟢 ASPI re-rating</div></div>
+        </div>
+      </div>
+
+    </div><!-- /imf-main -->
+
+    <div class="imf-sidebar">
+
+      <!-- Structural Benchmarks -->
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">📋 Structural Benchmarks Status</div></div>
+        <div class="imf-benchmarks" style="padding:12px">
+          <div class="imf-bench"><div class="imf-bench-name">Primary Surplus: +2% GDP</div><span class="imf-bench-status bench-met">✓ Met</span></div>
+          <div class="imf-bench"><div class="imf-bench-name">CEB Electricity Tariff Reform</div><span class="imf-bench-status bench-met">✓ Met</span></div>
+          <div class="imf-bench"><div class="imf-bench-name">Central Bank Act (Independence)</div><span class="imf-bench-status bench-met">✓ Met</span></div>
+          <div class="imf-bench"><div class="imf-bench-name">Domestic Debt Restructuring</div><span class="imf-bench-status bench-met">✓ Met</span></div>
+          <div class="imf-bench"><div class="imf-bench-name">ISB External Debt Restructuring</div><span class="imf-bench-status bench-partial">⏳ In Progress</span></div>
+          <div class="imf-bench"><div class="imf-bench-name">Revenue/GDP Target: 15%</div><span class="imf-bench-status bench-partial">⏳ 13.2% — Below Target</span></div>
+          <div class="imf-bench"><div class="imf-bench-name">SriLankan Airlines Restructuring</div><span class="imf-bench-status bench-partial">⏳ Delayed</span></div>
+          <div class="imf-bench"><div class="imf-bench-name">SOE Governance Reform</div><span class="imf-bench-status bench-partial">⏳ Partial</span></div>
+          <div class="imf-bench"><div class="imf-bench-name">Fuel Subsidy Removal</div><span class="imf-bench-status bench-met">✓ Met</span></div>
+          <div class="imf-bench"><div class="imf-bench-name">Anti-Corruption Framework</div><span class="imf-bench-status bench-pending">🕐 Pending</span></div>
+        </div>
+      </div>
+
+      <!-- What Comes After IMF -->
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">🚀 Post-IMF Roadmap (2027+)</div></div>
+        <div style="padding:12px;display:flex;flex-direction:column;gap:10px">
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:10px 12px">
+            <div style="font-size:10px;font-weight:700;color:var(--gold);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Likely Scenario</div>
+            <div style="font-size:12px;color:var(--text1);line-height:1.5">New IMF Precautionary Credit Line (PCL) — $1.5B buffer for 2027–2029. Maintains policy credibility without full conditionality.</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:10px 12px">
+            <div style="font-size:10px;font-weight:700;color:var(--blue);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">New Sovereign Bond Issuance</div>
+            <div style="font-size:12px;color:var(--text1);line-height:1.5">SL eligible for international markets post-2027. Estimated first bond: $500M–$1B. Lower coupon than pre-crisis thanks to IMF credibility.</div>
+          </div>
+          <div style="background:var(--bg3);border:1px solid var(--border);border-radius:4px;padding:10px 12px">
+            <div style="font-size:10px;font-weight:700;color:var(--up);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Credit Rating Upgrade Path</div>
+            <div style="font-size:12px;color:var(--text1);line-height:1.5">S&P: CCC → B by 2027 · Moody's: Ca → B3 by 2027. Upgrade unlocks EM index inclusion for CSE stocks → foreign capital inflow surge.</div>
+          </div>
+          <div style="background:rgba(38,166,154,.06);border:1px solid rgba(38,166,154,.2);border-radius:4px;padding:10px 12px">
+            <div style="font-size:10px;font-weight:700;color:var(--up);text-transform:uppercase;letter-spacing:.06em;margin-bottom:5px">Stock Sense LK View</div>
+            <div style="font-size:12px;color:var(--text1);line-height:1.5">IMF graduation is the single biggest re-rating catalyst for CSE since the crisis. ASPI target 18,000 by end 2027 assumes smooth IMF exit + rating upgrade.</div>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /imf-sidebar -->
+  </div>
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     SECTOR ANALYSIS
+════════════════════════════════════════════════════ -->
+<hr class="section-divider"/>
+<div style="background:rgba(61,133,200,.03);border-top:1px solid var(--border);border-bottom:1px solid var(--border);padding:14px 0" id="sectoranalysis">
+  <div style="max-width:1520px;margin:0 auto;padding:0 20px;display:flex;align-items:center;justify-content:space-between">
+    <div style="display:flex;align-items:center;gap:12px">
+      <div style="width:36px;height:36px;border-radius:8px;background:linear-gradient(135deg,rgba(61,133,200,.3),rgba(61,133,200,.1));border:1px solid rgba(61,133,200,.3);display:flex;align-items:center;justify-content:center;font-size:16px">📊</div>
+      <div><div style="font-size:18px;font-weight:700;color:var(--text1)">CSE Sector Analysis — Deep Dive</div><div style="font-size:12px;color:var(--text2);margin-top:2px">Policy impact · Key companies · Macro drivers · Stock Sense LK ratings by sector</div></div>
+    </div>
+    <!-- Heatmap mini -->
+    <div style="display:flex;gap:3px;align-items:center">
+      <div style="padding:5px 10px;border-radius:4px;background:rgba(38,166,154,.2);font-size:10px;font-weight:700;color:var(--up)">Hotels +4.2%</div>
+      <div style="padding:5px 10px;border-radius:4px;background:rgba(38,166,154,.15);font-size:10px;font-weight:700;color:var(--up)">IT +3.8%</div>
+      <div style="padding:5px 10px;border-radius:4px;background:rgba(38,166,154,.1);font-size:10px;font-weight:700;color:var(--up)">Banks +2.1%</div>
+      <div style="padding:5px 10px;border-radius:4px;background:rgba(239,83,80,.1);font-size:10px;font-weight:700;color:var(--down)">Logistics −1.4%</div>
+    </div>
+  </div>
+</div>
+
+<div class="full-section">
+  <div class="sector-tabs-row">
+    <button class="sec-tab-btn active" data-sec="hotels" onclick="switchSector('hotels',this)">🏨 Hotels &amp; Leisure</button>
+    <button class="sec-tab-btn" data-sec="it" onclick="switchSector('it',this)">💻 IT &amp; BPO</button>
+    <button class="sec-tab-btn" data-sec="logistics" onclick="switchSector('logistics',this)">🚢 Logistics &amp; Freight</button>
+    <button class="sec-tab-btn" data-sec="banking" onclick="switchSector('banking',this)">🏦 Banking &amp; Finance</button>
+    <button class="sec-tab-btn" data-sec="plantations" onclick="switchSector('plantations',this)">🍃 Plantations</button>
+    <button class="sec-tab-btn" data-sec="telecom" onclick="switchSector('telecom',this)">📡 Telecom &amp; Media</button>
+  </div>
+
+  <!-- HOTELS PANE -->
+  <div class="sector-pane active" id="sec-hotels">
+    <div class="sec-main">
+      <div class="sec-overview-bar">
+        <div class="sec-ov-item"><div class="sec-ov-label">Sector Return YTD</div><div class="sec-ov-val up">+31.4%</div><div class="sec-ov-sub">Best performer 2026</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Tourist Arrivals</div><div class="sec-ov-val">2.1M</div><div class="sec-ov-sub">Jan–Apr 2026</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Avg Revenue/Room</div><div class="sec-ov-val gold">USD 148</div><div class="sec-ov-sub">5-star Colombo · +22% YoY</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Occupancy Rate</div><div class="sec-ov-val up">76%</div><div class="sec-ov-sub">vs 48% in 2022</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">2026 Arrival Target</div><div class="sec-ov-val">2.5M</div><div class="sec-ov-sub">Tracking 84% of target</div></div>
+      </div>
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Policy Impact on Hotels &amp; Leisure</div></div></div>
+        <div class="pol-impact-grid">
+          <div class="pol-impact-card"><div class="pic-decision">Tourism VAT: 18% → 12%</div><div class="pic-text">Effective July 2026. Reduces operating costs for all hotel operators. Passes savings to travellers — makes SL more competitive vs Maldives and Bali.</div><div class="pic-verdict up">🟢 Strongly Positive · Direct earnings uplift</div></div>
+          <div class="pol-impact-card"><div class="pic-decision">IMF Programme Stability</div><div class="pic-text">LKR stability reduces FX risk for international guests. Hotel revenues mostly USD/EUR-denominated — stable LKR means less hedge cost and predictable LKR revenue conversion.</div><div class="pic-verdict up">🟢 Positive · Margin protection</div></div>
+          <div class="pol-impact-card"><div class="pic-decision">CBSL Rate Cut Outlook</div><div class="pic-text">Lower interest rates reduce hotel debt servicing costs (sector has significant LKR-denominated capex loans). Expansion projects become viable again — JKH Cinnamon Life, Aitken Spence pipeline.</div><div class="pic-verdict up">🟢 Positive · Capex enables expansion</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Hotels &amp; Leisure — CSE Stock Screener</div></div></div>
+        <table class="sec-stock-table">
+          <thead><tr><th>Symbol</th><th>Company</th><th>Price (LKR)</th><th>YTD %</th><th>P/E</th><th>EV/EBITDA</th><th>Revenue Growth</th><th>Stock Sense™</th></tr></thead>
+          <tbody>
+            <tr><td class="mono" style="font-weight:700">JKH.N0000</td><td>John Keells Holdings PLC</td><td class="mono">198.50</td><td class="mono up">+28.4%</td><td class="mono gold">14.2x</td><td class="mono">8.6x</td><td class="mono up">+34%</td><td><span class="stocksense-pill ss-strong-buy">🟢 Strong Buy</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">SPEN.N0000</td><td>Aitken Spence PLC</td><td class="mono">74.80</td><td class="mono up">+22.1%</td><td class="mono gold">11.8x</td><td class="mono">7.2x</td><td class="mono up">+28%</td><td><span class="stocksense-pill ss-buy">🟢 Buy</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">HHL.N0000</td><td>Hemas Holdings PLC</td><td class="mono">74.20</td><td class="mono up">+18.6%</td><td class="mono gold">16.1x</td><td class="mono">9.4x</td><td class="mono up">+19%</td><td><span class="stocksense-pill ss-hold">🟡 Hold</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">AHUN.N0000</td><td>Asian Hotels &amp; Properties</td><td class="mono">42.60</td><td class="mono up">+31.2%</td><td class="mono gold">12.4x</td><td class="mono">6.8x</td><td class="mono up">+41%</td><td><span class="stocksense-pill ss-strong-buy">🟢 Strong Buy</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">CTHR.N0000</td><td>CT Holdings PLC</td><td class="mono">147.50</td><td class="mono up">+24.8%</td><td class="mono gold">12.8x</td><td class="mono">7.9x</td><td class="mono up">+22%</td><td><span class="stocksense-pill ss-buy">🟢 Buy</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sec-sidebar-box">
+      <div class="sec-macro-box">
+        <div class="sec-macro-title">🌍 Key Macro Drivers</div>
+        <div class="sec-macro-items">
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>Tourism recovery momentum — 2.5M 2026 target tracking well; India + China markets key sources</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>VAT cut July 2026 directly improves price competitiveness vs competing destinations</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>Cinnamon Life Colombo opening 2026 — adds 300+ luxury keys to JKH's portfolio</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--gold)"></div><div>USD/LKR stable but any LKR strengthening reduces USD revenue conversion</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--gold)"></div><div>Labour shortages as hospitality workers remain abroad — wage inflation pressure</div></div>
+        </div>
+      </div>
+      <div class="panel">
+        <div class="panel-header"><div class="panel-title">📊 Sector Performance vs ASPI</div></div>
+        <div style="padding:12px"><canvas id="hotelChart" height="160"></canvas></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- IT PANE -->
+  <div class="sector-pane" id="sec-it">
+    <div class="sec-main">
+      <div class="sec-overview-bar">
+        <div class="sec-ov-item"><div class="sec-ov-label">Sector Return YTD</div><div class="sec-ov-val up">+28.7%</div><div class="sec-ov-sub">2nd best performer</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">IT Exports (2025)</div><div class="sec-ov-val">$1.4B</div><div class="sec-ov-sub">+22% YoY</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Workforce</div><div class="sec-ov-val gold">95,000</div><div class="sec-ov-sub">IT professionals</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Target 2025</div><div class="sec-ov-val">$3B</div><div class="sec-ov-sub">Exports by 2025</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">FDI in IT (2025)</div><div class="sec-ov-val up">$340M</div><div class="sec-ov-sub">Record inflows</div></div>
+      </div>
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Policy Impact on IT &amp; BPO</div></div></div>
+        <div class="pol-impact-grid">
+          <div class="pol-impact-card"><div class="pic-decision">IT Export Tax: 0% to 2030</div><div class="pic-text">Extended in Budget 2026 with further FDI incentives. Tax holiday is the single biggest competitive advantage for SL vs Philippines, India, and Bangladesh.</div><div class="pic-verdict up">🟢 Strongly Positive · Sector-defining policy</div></div>
+          <div class="pol-impact-card"><div class="pic-decision">Port City SEZ Financial Hub</div><div class="pic-text">Tech companies in SEZ pay 0% income tax for 25 years. Growing fintech and digital services cluster being developed — potential to replicate Singapore model at micro-scale.</div><div class="pic-verdict up">🟢 Positive · FDI magnet</div></div>
+          <div class="pol-impact-card"><div class="pic-decision">Digital Economy Framework (Q3)</div><div class="pic-text">New data protection and e-commerce licensing regime. Short-term compliance cost for operators; long-term credibility for SL as a data services hub for regional MNCs.</div><div class="pic-verdict gold">⚖️ Neutral-Positive · Mixed near term</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-head"><div><div class="sec-title">IT &amp; BPO — CSE Stock Screener</div></div></div>
+        <table class="sec-stock-table">
+          <thead><tr><th>Symbol</th><th>Company</th><th>Price (LKR)</th><th>YTD %</th><th>P/E</th><th>Revenue USD</th><th>Export%</th><th>Stock Sense™</th></tr></thead>
+          <tbody>
+            <tr><td class="mono" style="font-weight:700">CALT.N0000</td><td>Calcey Technologies PLC</td><td class="mono">52.40</td><td class="mono up">+48.2%</td><td class="mono gold">22.4x</td><td class="mono">$28M</td><td class="mono up">94%</td><td><span class="stocksense-pill ss-strong-buy">🟢 Strong Buy</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">DIAL.N0000</td><td>Dialog Axiata PLC</td><td class="mono">10.90</td><td class="mono down">−4.2%</td><td class="mono gold">18.4x</td><td class="mono">$180M</td><td class="mono">22%</td><td><span class="stocksense-pill ss-hold">🟡 Hold</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">BRNS.N0000</td><td>Browns Investments</td><td class="mono">8.80</td><td class="mono up">+18.9%</td><td class="mono gold">15.2x</td><td class="mono">$45M</td><td class="mono">68%</td><td><span class="stocksense-pill ss-buy">🟢 Buy</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sec-sidebar-box">
+      <div class="sec-macro-box">
+        <div class="sec-macro-title">🌍 Key Macro Drivers</div>
+        <div class="sec-macro-items">
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>Global demand for nearshore BPO/software from UK and Australian markets — SL time zone advantage</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>0% IT export tax renewed to 2030 — strongest fiscal incentive in the region for tech FDI</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--gold)"></div><div>Brain drain risk — 40,000+ IT professionals left SL 2022–2024. Talent pipeline remains tight</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--gold)"></div><div>LKR appreciation risk — IT revenues USD-denominated, LKR strengthening reduces LKR revenue</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>AI services opportunity — SL firms pivoting to AI/ML services command 40–60% premium billing</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- LOGISTICS PANE -->
+  <div class="sector-pane" id="sec-logistics">
+    <div class="sec-main">
+      <div class="sec-overview-bar">
+        <div class="sec-ov-item"><div class="sec-ov-label">Sector Return YTD</div><div class="sec-ov-val down">−8.4%</div><div class="sec-ov-sub">Worst performer 2026</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Port Throughput</div><div class="sec-ov-val">8.1M TEU</div><div class="sec-ov-sub">Colombo Port 2025</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Fuel Price Impact</div><div class="sec-ov-val down">+LKR 12</div><div class="sec-ov-sub">Per litre since Apr</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Freight Rates</div><div class="sec-ov-val gold">Stable</div><div class="sec-ov-sub">Asia–Europe corridor</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Trinco Expansion</div><div class="sec-ov-val">USD 700M</div><div class="sec-ov-sub">Cabinet approval pending</div></div>
+      </div>
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Policy Impact on Logistics &amp; Freight</div></div></div>
+        <div class="pol-impact-grid">
+          <div class="pol-impact-card"><div class="pic-decision">Fuel Price Formula Adjustment</div><div class="pic-text">IMF-mandated cost-reflective pricing added LKR 12/litre to petrol in April. Direct margin squeeze for transport and logistics operators. Larger players can hedge; smaller operators hit harder.</div><div class="pic-verdict down">🔴 Negative · Margin pressure sector-wide</div></div>
+          <div class="pol-impact-card"><div class="pic-decision">Trincomalee Port Expansion</div><div class="pic-text">If Cabinet approves USD 700M expansion, SL becomes dual-port transshipment hub. Game-changer for freight volumes and logistics sector long-term growth.</div><div class="pic-verdict up">🟢 Positive Long-Term · 2027+ catalyst</div></div>
+          <div class="pol-impact-card"><div class="pic-decision">Import Tax Rationalization</div><div class="pic-text">Selective reduction of import duties on commercial vehicles may reduce replacement capex costs for fleet operators. EV logistics subsidy scheme also proposed under Digital Economy Bill.</div><div class="pic-verdict gold">⚖️ Neutral-Positive · Mixed by sub-sector</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Logistics &amp; Freight — CSE Stock Screener</div></div></div>
+        <table class="sec-stock-table">
+          <thead><tr><th>Symbol</th><th>Company</th><th>Price (LKR)</th><th>YTD %</th><th>P/E</th><th>Revenue LKR</th><th>Fuel Sensitivity</th><th>Stock Sense™</th></tr></thead>
+          <tbody>
+            <tr><td class="mono" style="font-weight:700">EXPO.N0000</td><td>Expolanka Holdings PLC</td><td class="mono">46.20</td><td class="mono down">−12.4%</td><td class="mono gold">8.2x</td><td class="mono">LKR 280B</td><td class="mono down">High</td><td><span class="stocksense-pill ss-hold">🟡 Hold</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">SPEN.N0000</td><td>Aitken Spence (Freight)</td><td class="mono">74.80</td><td class="mono up">+6.8%</td><td class="mono gold">11.8x</td><td class="mono">LKR 48B</td><td class="mono gold">Medium</td><td><span class="stocksense-pill ss-buy">🟢 Buy</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">TRAN.N0000</td><td>Mahindra Ideal Finance</td><td class="mono">12.40</td><td class="mono down">−8.1%</td><td class="mono gold">10.4x</td><td class="mono">LKR 18B</td><td class="mono down">High</td><td><span class="stocksense-pill ss-hold">🟡 Hold</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sec-sidebar-box">
+      <div class="sec-macro-box">
+        <div class="sec-macro-title">🌍 Key Macro Drivers</div>
+        <div class="sec-macro-items">
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--down)"></div><div>Fuel price increases squeezing margins — fleet operators passing costs to customers with lag</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>Colombo Port maintains position as top transshipment hub in South Asia — 8.1M TEU in 2025</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>Post-recovery import volumes rebounding — consumer goods, construction materials volumes strong</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--gold)"></div><div>Global freight rates volatile — Red Sea disruption and supply chain realignment affecting Asia-Europe lanes</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- BANKING PANE -->
+  <div class="sector-pane" id="sec-banking">
+    <div class="sec-main">
+      <div class="sec-overview-bar">
+        <div class="sec-ov-item"><div class="sec-ov-label">Sector Return YTD</div><div class="sec-ov-val up">+18.9%</div><div class="sec-ov-sub">Strong recovery play</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Sector Avg P/E</div><div class="sec-ov-val gold">9.4x</div><div class="sec-ov-sub">vs 12x hist. average</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Credit Growth (Q1)</div><div class="sec-ov-val up">+12.4%</div><div class="sec-ov-sub">YoY — recovering</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">NPL Ratio</div><div class="sec-ov-val gold">8.2%</div><div class="sec-ov-sub">Declining from 12% peak</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Dividend Yield</div><div class="sec-ov-val up">5.8%</div><div class="sec-ov-sub">Sector average</div></div>
+      </div>
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Policy Impact on Banking &amp; Finance</div></div></div>
+        <div class="pol-impact-grid">
+          <div class="pol-impact-card"><div class="pic-decision">CBSL Rate Cycle — Easing</div><div class="pic-text">Rate cuts ahead squeeze Net Interest Margins near-term. However, credit growth re-acceleration and lower provisioning needs offset NIM pressure. Net effect: earnings positive.</div><div class="pic-verdict up">🟢 Net Positive · Credit volume growth offsets NIM squeeze</div></div>
+          <div class="pol-impact-card"><div class="pic-decision">Sovereign Rating Upgrade Path</div><div class="pic-text">As SL's sovereign rating improves post-IMF, banks (which hold government securities) see the value of their bond portfolios increase — direct balance sheet benefit.</div><div class="pic-verdict up">🟢 Strongly Positive · Balance sheet re-rating</div></div>
+          <div class="pol-impact-card"><div class="pic-decision">Withholding Tax on Dividends: 15%</div><div class="pic-text">New WHT on dividends reduces net yield for shareholders in banking stocks. Banks known as high-dividend payers — moderates retail investor appeal somewhat.</div><div class="pic-verdict down">🔴 Slightly Negative · Dividend yield compression</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Banking &amp; Finance — CSE Stock Screener</div></div></div>
+        <table class="sec-stock-table">
+          <thead><tr><th>Symbol</th><th>Company</th><th>Price (LKR)</th><th>YTD %</th><th>P/E</th><th>P/BV</th><th>Div Yield</th><th>Stock Sense™</th></tr></thead>
+          <tbody>
+            <tr><td class="mono" style="font-weight:700">SAMP.N0000</td><td>Sampath Bank PLC</td><td class="mono">89.75</td><td class="mono up">+22.4%</td><td class="mono gold">8.8x</td><td class="mono">1.0x</td><td class="mono up">6.8%</td><td><span class="stocksense-pill ss-strong-buy">🟢 Strong Buy</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">COMB.N0000</td><td>Commercial Bank of Ceylon</td><td class="mono">112.25</td><td class="mono up">+18.1%</td><td class="mono gold">9.4x</td><td class="mono">1.1x</td><td class="mono up">5.9%</td><td><span class="stocksense-pill ss-buy">🟢 Buy</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">HNB.N0000</td><td>Hatton National Bank</td><td class="mono">186.00</td><td class="mono up">+16.8%</td><td class="mono gold">8.2x</td><td class="mono">0.9x</td><td class="mono up">7.1%</td><td><span class="stocksense-pill ss-buy">🟢 Buy</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">NTB.N0000</td><td>Nations Trust Bank</td><td class="mono">68.40</td><td class="mono up">+14.2%</td><td class="mono gold">7.8x</td><td class="mono">0.8x</td><td class="mono up">5.2%</td><td><span class="stocksense-pill ss-hold">🟡 Hold</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sec-sidebar-box">
+      <div class="sec-macro-box">
+        <div class="sec-macro-title">🌍 Key Macro Drivers</div>
+        <div class="sec-macro-items">
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>Sector trading at ~9x P/E vs 12x historical — significant re-rating potential as NPLs normalise</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>Credit growth accelerating as consumer and business confidence returns — volumes rising</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--gold)"></div><div>NPL ratio still elevated at 8.2% — provisioning requirements keep earnings suppressed near-term</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>Sovereign upgrade will allow banks to attract cheaper foreign funding — cost of funds to decline</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- PLANTATIONS PANE -->
+  <div class="sector-pane" id="sec-plantations">
+    <div class="sec-main">
+      <div class="sec-overview-bar">
+        <div class="sec-ov-item"><div class="sec-ov-label">Sector Return YTD</div><div class="sec-ov-val up">+12.4%</div><div class="sec-ov-sub">Tax cut catalyst</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Tea Export Revenue</div><div class="sec-ov-val">$1.1B</div><div class="sec-ov-sub">2025 · Record high</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Colombo Tea Auction</div><div class="sec-ov-val gold">LKR 1,414/kg</div><div class="sec-ov-sub">Record auction price</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Rubber Price</div><div class="sec-ov-val up">$2.18/kg</div><div class="sec-ov-sub">+14% YoY</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Corporate Tax Rate</div><div class="sec-ov-val up">14%</div><div class="sec-ov-sub">Cut from 25% — Budget 2026</div></div>
+      </div>
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Policy Impact on Plantations</div></div></div>
+        <div class="pol-impact-grid">
+          <div class="pol-impact-card"><div class="pic-decision">Corporate Tax Cut: 25% → 14%</div><div class="pic-text">Single biggest earnings catalyst for the plantation sector in years. Affects all listed plantation companies — direct bottom-line uplift. EPS estimates revised +30–40% across sector.</div><div class="pic-verdict up">🟢 Strongly Positive · Major EPS catalyst</div></div>
+          <div class="pol-impact-card"><div class="pic-decision">Minimum Wage: LKR 800/day</div><div class="pic-text">Mandatory minimum wage for plantation workers increases labour costs by ~18%. Partially offsets tax benefit. Mechanisation investment now makes economic sense — long-term positive for yields.</div><div class="pic-verdict gold">⚖️ Mixed · Cost up, tax savings net positive</div></div>
+          <div class="pol-impact-card"><div class="pic-decision">LKR Stability</div><div class="pic-text">Tea and rubber exports are USD-denominated. LKR stability at 298-302 provides predictable LKR conversion. Any LKR strengthening is a risk; IMF programme keeps FX predictable.</div><div class="pic-verdict up">🟢 Positive · FX predictability</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Plantations — CSE Stock Screener</div></div></div>
+        <table class="sec-stock-table">
+          <thead><tr><th>Symbol</th><th>Company</th><th>Price (LKR)</th><th>YTD %</th><th>P/E (pre-tax cut)</th><th>P/E (post-tax cut est.)</th><th>Tea/Rubber Split</th><th>Stock Sense™</th></tr></thead>
+          <tbody>
+            <tr><td class="mono" style="font-weight:700">CARS.N0000</td><td>Carson Cumberbatch</td><td class="mono">389.00</td><td class="mono up">+10.2%</td><td class="mono">13.2x</td><td class="mono gold">9.4x</td><td class="mono">80/20 Plantation+Holdings</td><td><span class="stocksense-pill ss-buy">🟢 Buy</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">KLNR.N0000</td><td>Kelani Valley Plantations</td><td class="mono">82.40</td><td class="mono up">+14.8%</td><td class="mono">11.4x</td><td class="mono gold">8.2x</td><td class="mono">70/30 Tea/Rubber</td><td><span class="stocksense-pill ss-strong-buy">🟢 Strong Buy</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">TEL.N0000</td><td>Talawakelle Tea Estates</td><td class="mono">48.60</td><td class="mono up">+18.2%</td><td class="mono">10.8x</td><td class="mono gold">7.6x</td><td class="mono">95/5 Tea dominant</td><td><span class="stocksense-pill ss-strong-buy">🟢 Strong Buy</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sec-sidebar-box">
+      <div class="sec-macro-box">
+        <div class="sec-macro-title">🌍 Key Macro Drivers</div>
+        <div class="sec-macro-items">
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>Tea auction prices at record LKR 1,414/kg — global supply tightness from Kenya drought</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>Corporate tax cut 25%→14% adds 30–40% to EPS — single biggest policy benefit for the sector</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--gold)"></div><div>Fertiliser prices remain elevated — input cost pressure on margins despite price tailwind</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--gold)"></div><div>Climate risk — El Niño pattern affects yield in certain regions; water management critical</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TELECOM PANE -->
+  <div class="sector-pane" id="sec-telecom">
+    <div class="sec-main">
+      <div class="sec-overview-bar">
+        <div class="sec-ov-item"><div class="sec-ov-label">Sector Return YTD</div><div class="sec-ov-val down">−2.8%</div><div class="sec-ov-sub">Underperformer</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">Mobile Penetration</div><div class="sec-ov-val gold">148%</div><div class="sec-ov-sub">SIM cards per person</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">4G Coverage</div><div class="sec-ov-val up">91%</div><div class="sec-ov-sub">Population coverage</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">ARPU (Dialog)</div><div class="sec-ov-val gold">LKR 680</div><div class="sec-ov-sub">Monthly · Flat YoY</div></div>
+        <div class="sec-ov-item"><div class="sec-ov-label">5G Timeline</div><div class="sec-ov-val">2027</div><div class="sec-ov-sub">TRCSL auction expected</div></div>
+      </div>
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Policy Impact on Telecom &amp; Media</div></div></div>
+        <div class="pol-impact-grid">
+          <div class="pol-impact-card"><div class="pic-decision">IT Export Incentives Extended</div><div class="pic-text">Dialog's enterprise and cloud services division benefits from the IT export tax regime. Encourages expansion into IT services alongside core telco.</div><div class="pic-verdict up">🟢 Positive for Dialog Enterprise</div></div>
+          <div class="pol-impact-card"><div class="pic-decision">Digital Economy Framework</div><div class="pic-text">Data localisation requirements could impose infrastructure capex costs on telcos. However, formalising digital payments creates revenue opportunity for mobile money platforms.</div><div class="pic-verdict gold">⚖️ Mixed · Compliance cost vs opportunity</div></div>
+          <div class="pol-impact-card"><div class="pic-decision">5G Spectrum Auction</div><div class="pic-text">TRCSL expected to launch 5G spectrum auction in 2027. Capex-intensive for operators but unlocks new revenue streams: IoT, enterprise 5G, fixed wireless access replacing fibre.</div><div class="pic-verdict gold">⚖️ Long-term Positive · Near-term capex heavy</div></div>
+        </div>
+      </div>
+      <div>
+        <div class="sec-head"><div><div class="sec-title">Telecom &amp; Media — CSE Stock Screener</div></div></div>
+        <table class="sec-stock-table">
+          <thead><tr><th>Symbol</th><th>Company</th><th>Price (LKR)</th><th>YTD %</th><th>P/E</th><th>EV/EBITDA</th><th>Div Yield</th><th>Stock Sense™</th></tr></thead>
+          <tbody>
+            <tr><td class="mono" style="font-weight:700">DIAL.N0000</td><td>Dialog Axiata PLC</td><td class="mono">10.90</td><td class="mono down">−4.2%</td><td class="mono gold">18.4x</td><td class="mono">6.2x</td><td class="mono">3.8%</td><td><span class="stocksense-pill ss-hold">🟡 Hold</span></td></tr>
+            <tr><td class="mono" style="font-weight:700">ETCA.N0000</td><td>Softlogic Life Insurance</td><td class="mono">18.60</td><td class="mono up">+8.4%</td><td class="mono gold">14.2x</td><td class="mono">8.4x</td><td class="mono">4.2%</td><td><span class="stocksense-pill ss-hold">🟡 Hold</span></td></tr>
+          </tbody>
+        </table>
+      </div>
+    </div>
+    <div class="sec-sidebar-box">
+      <div class="sec-macro-box">
+        <div class="sec-macro-title">🌍 Key Macro Drivers</div>
+        <div class="sec-macro-items">
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--gold)"></div><div>Saturated mobile market (148% penetration) limits subscriber growth — ARPU improvement is key</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>Enterprise cloud and IT services division growing 28% — offsets weak consumer ARPU</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--gold)"></div><div>5G capex looming — balance sheet strain before revenue materialises in 2027–2028</div></div>
+          <div class="sec-macro-item"><div class="sec-macro-dot" style="background:var(--up)"></div><div>Digital payment volumes growing 42% YoY — eZ Cash and digital wallet monetisation</div></div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+</div>
+
+<!-- ════════════════════════════════════════════════════
+     FOOTER
+════════════════════════════════════════════════════ -->
+<footer>
+  <div class="footer-inner">
+    <div class="disclaimer">
+      ⚠️ <strong>Risk Warning:</strong> Trading on the Colombo Stock Exchange involves significant risk. CSE Pulse provides data and educational tools only — nothing constitutes financial advice. Stock Sense LK signals are experimental and AI-generated. Policy analysis is based on publicly available information and should not be construed as investment advice. Not registered with the SEC of Sri Lanka as an investment advisor. Past performance does not guarantee future results.
+    </div>
+    <div class="footer-grid">
+      <div class="footer-brand">
+        <div class="logo"><div class="logo-icon">⚡</div><div class="logo-name">CSE <span>Pulse</span></div></div>
+        <p>Sri Lanka's most advanced market analysis platform. Real estate, policy, IMF tracker, and sector intelligence — built for investors navigating the CSE and the post-crisis recovery.</p>
+        <div class="social-row">
+          <a class="soc-btn" href="#">𝕏</a><a class="soc-btn" href="#">f</a>
+          <a class="soc-btn" href="#">in</a><a class="soc-btn" href="#">▶</a>
+          <a class="soc-btn" href="#">✈</a>
+        </div>
+      </div>
+      <div class="footer-col"><h5>Markets</h5><ul><li><a href="#">ASPI Overview</a></li><li><a href="#">Stock Screener</a></li><li><a href="#">Real Estate Index</a></li><li><a href="#">Top Gainers</a></li><li><a href="#">IPO Tracker</a></li><li><a href="#">Earnings Calendar</a></li></ul></div>
+      <div class="footer-col"><h5>Analysis</h5><ul><li><a href="#">IMF Tracker</a></li><li><a href="#">Policy Hub</a></li><li><a href="#">Sector Deep Dives</a></li><li><a href="#">Recovery Tracker</a></li><li><a href="#">Portfolio Tracker</a></li><li><a href="#">RE vs Equity</a></li></ul></div>
+      <div class="footer-col"><h5>Learn</h5><ul><li><a href="#">Investor Academy</a></li><li><a href="#">Sinhala Guides</a></li><li><a href="#">Tamil Resources</a></li><li><a href="#">Webinars</a></li><li><a href="#">Glossary</a></li><li><a href="#">How to invest in CSE</a></li></ul></div>
+      <div class="footer-col"><h5>Company</h5><ul><li><a href="#">About Us</a></li><li><a href="#">Methodology</a></li><li><a href="#">API Access</a></li><li><a href="#">Pricing & Plans</a></li><li><a href="#">Contact</a></li><li><a href="#">Careers</a></li></ul></div>
+    </div>
+    <div class="footer-bottom">
+      <div>© 2026 CSE Pulse (Pvt) Ltd · 45 Galle Road, Colombo 03, Sri Lanka · All rights reserved</div>
+      <div class="footer-links"><a href="#">Privacy</a><a href="#">Terms</a><a href="#">Cookies</a><a href="#">SEC Compliance</a></div>
+    </div>
+  </div>
+</footer>
+
+<!-- ════════════════════════════════════════════════════
+     SCRIPTS
+════════════════════════════════════════════════════ -->
+<script>
+/* ─── TICKER ─── */
+const TICKERS=[
+  {s:'JKH.N0000',p:'198.50',c:'+2.34%',u:true},{s:'COMB.N0000',p:'112.25',c:'+1.12%',u:true},
+  {s:'SAMP.N0000',p:'89.75',c:'+3.21%',u:true},{s:'HHL.N0000',p:'74.20',c:'-0.80%',u:false},
+  {s:'DIST.N0000',p:'16.50',c:'+0.61%',u:true},{s:'DIAL.N0000',p:'10.90',c:'-0.45%',u:false},
+  {s:'CTHR.N0000',p:'147.50',c:'+2.08%',u:true},{s:'CARS.N0000',p:'389.00',c:'-1.27%',u:false},
+  {s:'CALT.N0000',p:'52.40',c:'+4.76%',u:true},{s:'RICH.N0000',p:'28.60',c:'+1.06%',u:true},
+  {s:'EXPO.N0000',p:'46.20',c:'-2.14%',u:false},{s:'SPEN.N0000',p:'74.80',c:'+1.22%',u:true},
+  {s:'ORC.N0000',p:'18.40',c:'+1.66%',u:true},{s:'HNB.N0000',p:'186.00',c:'+2.10%',u:true},
+  {s:'TEL.N0000',p:'48.60',c:'+3.40%',u:true},{s:'KLNR.N0000',p:'82.40',c:'+2.20%',u:true},
+];
+const tr=document.getElementById('tickerTrack');
+const html=TICKERS.map(t=>`<div class="t-item"><span class="t-sym">${t.s}</span><span class="t-price">${t.p}</span><span class="t-chg ${t.u?'up':'down'}">${t.c}</span></div>`).join('');
+tr.innerHTML=html+html;
+
+/* ─── MINI CHARTS ─── */
+function miniChart(id,vals,color){
+  const c=document.getElementById(id);if(!c)return;
+  const g=c.getContext('2d');
+  const grad=g.createLinearGradient(0,0,0,38);
+  grad.addColorStop(0,color.replace('1)','0.25)'));grad.addColorStop(1,color.replace('1)','0.02)'));
+  new Chart(c,{type:'line',data:{labels:vals.map((_,i)=>i),datasets:[{data:vals,borderColor:color,borderWidth:1.5,pointRadius:0,tension:0.4,fill:true,backgroundColor:grad}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
+}
+miniChart('m-aspi',[12300,12350,12420,12390,12480,12560,12640,12720,12780,12847],'rgba(38,166,154,1)');
+miniChart('m-sl20',[3980,4010,4050,4020,4080,4120,4150,4180,4200,4219],'rgba(38,166,154,1)');
+miniChart('m-lkr',[302.5,302,301.5,300.8,300.2,299.6,299.1,298.8,298.6,298.45],'rgba(201,168,76,1)');
+miniChart('m-gold',[3280,3290,3300,3295,3310,3315,3308,3320,3318,3322],'rgba(201,168,76,1)');
+miniChart('m-bond',[11.8,11.7,11.65,11.6,11.55,11.52,11.48,11.45,11.43,11.42],'rgba(239,83,80,1)');
+
+/* ─── MAIN CHART ─── */
+(function(){
+  const ctx=document.getElementById('mainChart').getContext('2d');
+  const labels=['09:30','10:00','10:30','11:00','11:30','12:00','12:30','13:00','13:30','14:00','14:30'];
+  const data=[12690,12715,12740,12758,12782,12800,12812,12795,12820,12838,12847];
+  const g=ctx.createLinearGradient(0,0,0,200);
+  g.addColorStop(0,'rgba(38,166,154,0.3)');g.addColorStop(1,'rgba(38,166,154,0.02)');
+  new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'ASPI',data,borderColor:'#26a69a',borderWidth:2,pointRadius:0,pointHoverRadius:5,pointHoverBackgroundColor:'#26a69a',tension:0.4,fill:true,backgroundColor:g}]},options:{responsive:true,maintainAspectRatio:false,interaction:{mode:'index',intersect:false},plugins:{legend:{display:false},tooltip:{backgroundColor:'#131b2a',borderColor:'#1e2d42',borderWidth:1,titleColor:'#8094a8',bodyColor:'#d9dde8',padding:10}},scales:{x:{grid:{color:'rgba(30,45,66,.4)'},ticks:{color:'#4a6070',font:{size:11}}},y:{position:'right',grid:{color:'rgba(30,45,66,.4)'},ticks:{color:'#4a6070',font:{size:11},callback:v=>v.toLocaleString()},min:12650,max:12880}}}});
+})();
+
+/* ─── RE vs EQUITY CHART ─── */
+(function(){
+  const c=document.getElementById('reVsEquityChart');if(!c)return;
+  const ctx=c.getContext('2d');
+  const labels=['Jan\'23','Apr','Jul','Oct','Jan\'24','Apr','Jul','Oct','Jan\'25','Apr','Jul','Oct','Jan\'26','Apr'];
+  const aspi=[100,108,121,135,148,162,172,180,195,208,220,235,250,265];
+  const re=[100,103,107,112,118,123,129,136,142,148,154,158,162,165];
+  new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'ASPI',data:aspi,borderColor:'#26a69a',borderWidth:2,pointRadius:0,tension:0.4,fill:false},{label:'Colombo Prime RE',data:re,borderColor:'#C9A84C',borderWidth:2,pointRadius:0,tension:0.4,fill:false,borderDash:[4,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'#8094a8',font:{size:11},boxWidth:20}},tooltip:{backgroundColor:'#131b2a',borderColor:'#1e2d42',borderWidth:1,bodyColor:'#d9dde8'}},scales:{x:{grid:{color:'rgba(30,45,66,.3)'},ticks:{color:'#4a6070',font:{size:10}}},y:{grid:{color:'rgba(30,45,66,.3)'},ticks:{color:'#4a6070',font:{size:10},callback:v=>v+''}},}}});
+})();
+
+/* ─── HOTEL SECTOR CHART ─── */
+(function(){
+  const c=document.getElementById('hotelChart');if(!c)return;
+  const ctx=c.getContext('2d');
+  const labels=['Jan','Feb','Mar','Apr','May','Jun','Jul','Aug','Sep','Oct','Nov','Dec'];
+  const hotel=[100,108,115,124,132,142,148,156,162,170,178,188];
+  const aspi=[100,104,110,118,124,130,133,138,142,147,152,158];
+  new Chart(ctx,{type:'line',data:{labels,datasets:[{label:'H&L Sector',data:hotel,borderColor:'#26a69a',borderWidth:2,pointRadius:0,tension:0.4,fill:false},{label:'ASPI',data:aspi,borderColor:'#4a6070',borderWidth:1.5,pointRadius:0,tension:0.4,fill:false,borderDash:[4,3]}]},options:{responsive:true,maintainAspectRatio:false,plugins:{legend:{display:true,labels:{color:'#8094a8',font:{size:10},boxWidth:16}},tooltip:{backgroundColor:'#131b2a',borderColor:'#1e2d42',borderWidth:1,bodyColor:'#d9dde8'}},scales:{x:{grid:{display:false},ticks:{color:'#4a6070',font:{size:10}}},y:{grid:{color:'rgba(30,45,66,.3)'},ticks:{color:'#4a6070',font:{size:10}}}}}});
+})();
+
+/* ─── STOCKS TABLE ─── */
+const STOCKS=[
+  {sym:'JKH.N0000',full:'John Keells Holdings PLC',price:198.50,chg:2.34,abs:4.54,hi:199.20,lo:195.80,vol:'24.2M',cap:'148B',pe:14.2,sig:'buy'},
+  {sym:'COMB.N0000',full:'Commercial Bank of Ceylon PLC',price:112.25,chg:1.12,abs:1.24,hi:113.00,lo:111.50,vol:'18.7M',cap:'98B',pe:9.4,sig:'buy'},
+  {sym:'SAMP.N0000',full:'Sampath Bank PLC',price:89.75,chg:3.21,abs:2.79,hi:90.50,lo:87.80,vol:'14.1M',cap:'72B',pe:8.8,sig:'buy'},
+  {sym:'DIAL.N0000',full:'Dialog Axiata PLC',price:10.90,chg:-0.45,abs:-0.05,hi:11.10,lo:10.80,vol:'12.8M',cap:'82B',pe:18.4,sig:'hold'},
+  {sym:'HHL.N0000',full:'Hemas Holdings PLC',price:74.20,chg:-0.80,abs:-0.60,hi:74.90,lo:73.80,vol:'8.2M',cap:'58B',pe:16.1,sig:'hold'},
+  {sym:'DIST.N0000',full:'Distilleries Company of SL',price:16.50,chg:0.61,abs:0.10,hi:16.70,lo:16.40,vol:'10.4M',cap:'46B',pe:11.2,sig:'hold'},
+  {sym:'CTHR.N0000',full:'CT Holdings PLC',price:147.50,chg:2.08,abs:3.00,hi:148.20,lo:145.20,vol:'6.1M',cap:'42B',pe:12.8,sig:'buy'},
+  {sym:'CARS.N0000',full:'Carson Cumberbatch PLC',price:389.00,chg:-1.27,abs:-5.00,hi:393.00,lo:387.50,vol:'3.8M',cap:'38B',pe:13.2,sig:'sell'},
+  {sym:'CALT.N0000',full:'Calcey Technologies PLC',price:52.40,chg:4.76,abs:2.39,hi:53.20,lo:50.80,vol:'2.1M',cap:'8B',pe:22.4,sig:'buy'},
+  {sym:'EXPO.N0000',full:'Expolanka Holdings PLC',price:46.20,chg:-2.14,abs:-1.01,hi:47.50,lo:45.90,vol:'9.8M',cap:'62B',pe:8.2,sig:'hold'},
+];
+function renderTable(){
+  const tbody=document.getElementById('tableBody');
+  tbody.innerHTML=STOCKS.map((s,i)=>{
+    const up=s.chg>=0;
+    const sparkId=`sp-${i}`;
+    const sigClass={buy:'sig-buy',hold:'sig-hold',sell:'sig-sell'}[s.sig];
+    const sigLabel={buy:'🟢 BUY',hold:'🟡 HOLD',sell:'🔴 SELL'}[s.sig];
+    return `<tr id="row-${i}"><td><span class="star-btn" onclick="this.classList.toggle('active')">☆</span></td><td><div class="stock-cell"><span class="stock-sym">${s.sym}</span><span class="stock-full">${s.full}</span></div></td><td class="price-cell">${s.price.toFixed(2)}</td><td><span class="chg-pill ${up?'chg-up':'chg-down'}">${up?'▲':'▼'} ${Math.abs(s.chg).toFixed(2)}%</span></td><td class="${up?'up':'down'} mono" style="font-size:12px">${up?'+':''}${s.abs.toFixed(2)}</td><td class="vol-cell">${s.hi.toFixed(2)}</td><td class="vol-cell">${s.lo.toFixed(2)}</td><td class="vol-cell">${s.vol}</td><td class="vol-cell">LKR ${s.cap}</td><td class="gold mono" style="font-size:12px">${s.pe}x</td><td class="signal-cell"><span class="${sigClass}">${sigLabel}</span></td><td class="spark-cell"><canvas id="${sparkId}" width="80" height="28"></canvas></td></tr>`;
+  }).join('');
+  STOCKS.forEach((s,i)=>{
+    const base=s.price;
+    const vals=Array.from({length:7},(_,j)=>+(base+(Math.random()-.5)*base*.04).toFixed(2));
+    const c=document.getElementById(`sp-${i}`);
+    if(!c)return;
+    const up=s.chg>=0;
+    new Chart(c,{type:'line',data:{labels:vals.map((_,k)=>k),datasets:[{data:vals,borderColor:up?'#26a69a':'#ef5350',borderWidth:1.5,pointRadius:0,tension:0.4}]},options:{responsive:false,maintainAspectRatio:false,plugins:{legend:{display:false},tooltip:{enabled:false}},scales:{x:{display:false},y:{display:false}}}});
+  });
+}
+renderTable();
+
+/* ─── MOST VISITED ─── */
+const mvData=[
+  {sym:'JKH.N0000',name:'John Keells Holdings',price:'198.50',chg:'+2.34%',up:true},
+  {sym:'SAMP.N0000',name:'Sampath Bank',price:'89.75',chg:'+3.21%',up:true},
+  {sym:'COMB.N0000',name:'Commercial Bank',price:'112.25',chg:'+1.12%',up:true},
+  {sym:'DIAL.N0000',name:'Dialog Axiata',price:'10.90',chg:'-0.45%',up:false},
+  {sym:'EXPO.N0000',name:'Expolanka Holdings',price:'46.20',chg:'-2.14%',up:false},
+];
+document.getElementById('mvList').innerHTML=mvData.map((m,i)=>`<div class="mv-item"><span class="mv-rank">${i+1}</span><div class="mv-info"><div class="mv-sym">${m.sym}</div><div class="mv-name">${m.name}</div></div><div><div class="mv-price mono">${m.price}</div><div class="mv-chg ${m.up?'up':'down'}">${m.chg}</div></div></div>`).join('');
+
+/* ─── MINI CALENDAR ─── */
+const calItems=[
+  {date:'Mon 19',time:'10:00',evt:'CBSL Rate Decision',imp:'high'},
+  {date:'Wed 21',time:'09:00',evt:'GDP Q1 2026 Advance',imp:'high'},
+  {date:'Fri 23',time:'All Day',evt:'IMF 6th Review — Final',imp:'high'},
+  {date:'Fri 30',time:'09:30',evt:'Tourist Arrivals (May)',imp:'med'},
+];
+document.getElementById('miniCalendar').innerHTML=calItems.map(c=>`<div style="display:flex;align-items:center;gap:10px;padding:8px 14px;border-bottom:1px solid rgba(30,45,66,.6)"><div style="min-width:50px;font-size:10.5px;color:var(--text2)">${c.date}<br/><span class="mono" style="font-size:10px">${c.time}</span></div><div style="flex:1;font-size:12px;line-height:1.3">${c.evt}</div><div class="${c.imp==='high'?'imp-high':'imp-med'}">${c.imp==='high'?'●●●':'●●'}</div></div>`).join('');
+
+/* ─── GAUGE CHART ─── */
+(function(){
+  const c=document.getElementById('gaugeChart');if(!c)return;
+  new Chart(c,{type:'doughnut',data:{datasets:[{data:[4,5,17],backgroundColor:['#ef5350','#C9A84C','#26a69a'],borderWidth:0,circumference:180,rotation:-90}]},options:{responsive:false,cutout:'70%',plugins:{legend:{display:false},tooltip:{enabled:false}}}});
+})();
+
+/* ─── SECTOR TABS ─── */
+function switchSector(id, btn){
+  document.querySelectorAll('.sector-pane').forEach(p=>p.classList.remove('active'));
+  document.querySelectorAll('.sec-tab-btn').forEach(b=>b.classList.remove('active'));
+  const pane=document.getElementById('sec-'+id);
+  if(pane)pane.classList.add('active');
+  if(btn)btn.classList.add('active');
+}
+
+/* ─── ASSET TABS ─── */
+document.querySelectorAll('.asset-tab').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.asset-tab').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+/* ─── INDEX CARD CLICK ─── */
+document.querySelectorAll('.idx-card').forEach(card=>{
+  card.addEventListener('click',function(){
+    document.querySelectorAll('.idx-card').forEach(c=>c.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+/* ─── TIME BTNS ─── */
+document.querySelectorAll('.time-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.time-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+/* ─── FILTER BTNS ─── */
+document.querySelectorAll('.filter-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.filter-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+/* ─── NEWS TABS ─── */
+document.querySelectorAll('.news-tab').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.news-tab').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+/* ─── CIS BTNS ─── */
+document.querySelectorAll('.cis-btn').forEach(btn=>{
+  btn.addEventListener('click',function(){
+    document.querySelectorAll('.cis-btn').forEach(b=>b.classList.remove('active'));
+    this.classList.add('active');
+  });
+});
+
+/* ─── STOCK SENSE LK AI ─── */
+const sideAiAnswers={
+  jkh:'📊 JKH @ LKR 198.50 · P/E 14.2x (22% below 5yr avg). Tourism recovery + Cinnamon Life opening 2026 are key catalysts. Tourism VAT cut from 18% → 12% in July is a direct earnings boost. Stock Sense LK Signal: 🟢 STRONG BUY. Target LKR 260.',
+  samp:'SAMP at 8.8x P/E vs 12x historical avg. Q1 profit +28%. Credit growth recovering strongly post-IMF. Rate cut cycle will compress NIM but credit volumes more than offset. 🟢 Strong Buy.',
+  bank:'Banking sector in structural re-rating. Trading at ~9x vs 12x historic. Key picks: SAMP (8.8x), COMB (9.4x), HNB (8.2x). Rate cuts ahead — buy the sector on dips. IMF programme graduation = sovereign rating upgrade = banks re-rate. 🟢 Overweight.',
+  hotel:'Hotels & Leisure is the #1 sector for 2026. Tourism VAT cut July 2026, record arrivals, JKH Cinnamon Life opening. ASPI H&L index +31.4% YTD. Top picks: JKH (Strong Buy), AHUN (Strong Buy). Tailwind for next 12 months.',
+  imf:'IMF 5th review completed. $350M tranche disbursed. 6th and final review expected May 23 — programme graduation. This is the single biggest re-rating catalyst for CSE. Post-IMF: credit rating upgrade path, new sovereign bond issuance, foreign capital inflow surge. ASPI target 18,000 by 2027.',
+  realestate:'Colombo prime RE up 18–22% YoY. Port City Phase 2 open at USD 850/sqft (0% tax SEZ). Galle and Mirissa south coast up 30–35% on tourism demand. Mortgage rates still high (14-16%) suppressing mid-market. CBSL rate cuts expected H2 2026 — unlock buyer demand.',
+  logistics:'Logistics sector is the 2026 underperformer. Fuel price hike (+LKR 12/litre) squeezing margins. Expolanka (EXPO) down 12% YTD. Watch for Trincomalee port expansion approval — structural re-rating catalyst for 2027. 🟡 Hold sector, accumulate EXPO near LKR 42.',
+  it:'IT/BPO sector: 0% tax on exports to 2030 is the strongest sectoral incentive. Calcey (CALT) up 48% YTD — small cap leader. AI services pivot commands premium billing. Risk: brain drain — talent remains tight. 🟢 Overweight.',
+  rupee:'LKR stable at 298-302 vs USD. IMF programme keeps FX credible. Forex reserves $5.6B — 3.2 months import cover. Stock Sense LK rates LKR risk as LOW for next 6 months. Rate cut cycle ahead may cause modest LKR softness.',
+  default:'Ask me anything! I cover CSE stocks (try "JKH", "SAMP"), sectors (try "hotels", "IT", "logistics"), IMF programme updates, real estate prices, CBSL policy, or general market outlook. I\'m updated with 2026 data. 🇱🇰',
+};
+function sideAiQuery(){
+  const inp=document.getElementById('sideAiInput');
+  const q=inp.value.trim();if(!q)return;
+  const chat=document.getElementById('stocksenseChat');
+  chat.innerHTML+=`<div class="stocksense-msg user-msg"><div class="user-avatar">You</div><div class="user-bubble">${q}</div></div>`;
+  inp.value='';
+  const ql=q.toLowerCase();
+  let ans=sideAiAnswers.default;
+  if(ql.includes('jkh')||ql.includes('john keells'))ans=sideAiAnswers.jkh;
+  else if(ql.includes('samp')||ql.includes('sampath'))ans=sideAiAnswers.samp;
+  else if(ql.includes('hotel')||ql.includes('leisure')||ql.includes('tourism'))ans=sideAiAnswers.hotel;
+  else if(ql.includes('bank'))ans=sideAiAnswers.bank;
+  else if(ql.includes('imf')||ql.includes('bailout')||ql.includes('programme'))ans=sideAiAnswers.imf;
+  else if(ql.includes('real estate')||ql.includes('property')||ql.includes('port city'))ans=sideAiAnswers.realestate;
+  else if(ql.includes('logistic')||ql.includes('freight')||ql.includes('expo'))ans=sideAiAnswers.logistics;
+  else if(ql.includes(' it ')||ql.includes('bpo')||ql.includes('tech')||ql.includes('software'))ans=sideAiAnswers.it;
+  else if(ql.includes('rupee')||ql.includes('lkr')||ql.includes('forex'))ans=sideAiAnswers.rupee;
+  setTimeout(()=>{
+    chat.innerHTML+=`<div class="stocksense-msg"><div class="stocksense-avatar">AI</div><div class="stocksense-bubble">${ans}</div></div>`;
+    chat.scrollTop=chat.scrollHeight;
+  },600);
+  chat.scrollTop=chat.scrollHeight;
+}
+document.getElementById('sideAiInput').addEventListener('keydown',e=>{if(e.key==='Enter')sideAiQuery();});
+
+/* ─── LIVE TICK ─── */
+function liveTick(){
+  STOCKS.forEach((_,i)=>{
+    if(Math.random()<0.3){
+      const row=document.getElementById(`row-${i}`);
+      if(row){const up=Math.random()>0.5;row.classList.remove('flash-up','flash-down');void row.offsetWidth;row.classList.add(up?'flash-up':'flash-down');}
+    }
+  });
+  const el=document.getElementById('iv-aspi');
+  if(el){const v=parseFloat(el.textContent.replace(/,/g,''));const d=(Math.random()-.48)*2;el.textContent=(v+d).toLocaleString('en',{minimumFractionDigits:2,maximumFractionDigits:2});}
+}
+setInterval(liveTick,4000);
+
+/* ─── COUNTDOWN ─── */
+function updateTimer(){
+  const now=new Date();
+  const close=new Date(now);close.setHours(14,30,0,0);
+  if(now>close)close.setDate(close.getDate()+1);
+  const diff=close-now;
+  const h=Math.floor(diff/3600000).toString().padStart(2,'0');
+  const m=Math.floor((diff%3600000)/60000).toString().padStart(2,'0');
+  const s=Math.floor((diff%60000)/1000).toString().padStart(2,'0');
+  const el=document.getElementById('closeTimer');
+  if(el)el.textContent=`${h}:${m}:${s}`;
+}
+setInterval(updateTimer,1000);updateTimer();
+</script>
+</body>
+</html>
