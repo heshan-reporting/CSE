@@ -38,7 +38,7 @@ compatibility_flags = ["nodejs_compat"]
 # ================================================================
 [[kv_namespaces]]
 binding    = "CSE_KV"
-id         = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+id         = "1bdb0929296d4615bd4d8bde225061ad"
 preview_id = "REPLACE_WITH_YOUR_KV_PREVIEW_ID"
 
 # ================================================================
