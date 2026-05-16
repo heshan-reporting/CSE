@@ -1,0 +1,136 @@
+# ================================================================
+#  CSE Pulse — Cloudflare Worker Configuration
+#  wrangler.toml
+# ================================================================
+#
+#  SETUP CHECKLIST (do these in order):
+#
+#  1. Run: npx wrangler kv:namespace create CSE_KV
+#          → Copy the returned ID into [[kv_namespaces]] below
+#
+#  2. Run: npx wrangler kv:namespace create CSE_KV --preview
+#          → Copy the returned ID into preview_id below
+#
+#  3. Set secrets (never put real keys in this file):
+#          npx wrangler secret put ANTHROPIC_API_KEY
+#          npx wrangler secret put ALPHA_VANTAGE_KEY
+#          npx wrangler secret put MARKETAUX_KEY
+#          npx wrangler secret put ADMIN_TOKEN
+#          npx wrangler secret put ALLOWED_ORIGIN
+#
+#  4. Deploy: npx wrangler deploy
+#
+# ================================================================
+
+# ── Worker Identity ───────────────────────────────────────────
+name              = "cse-pulse-api"
+main              = "cse-pulse-worker.js"
+compatibility_date = "2024-11-01"
+compatibility_flags = ["nodejs_compat"]
+
+# ── Account (optional — Wrangler auto-detects from login) ────
+# account_id = "YOUR_CLOUDFLARE_ACCOUNT_ID"
+
+# ================================================================
+#  KV NAMESPACE — Market Data Cache
+#  Run first: npx wrangler kv:namespace create CSE_KV
+#  Paste the returned id below.
+# ================================================================
+[[kv_namespaces]]
+binding    = "CSE_KV"
+id         = "REPLACE_WITH_YOUR_KV_NAMESPACE_ID"
+preview_id = "REPLACE_WITH_YOUR_KV_PREVIEW_ID"
+
+# ================================================================
+#  CRON TRIGGERS — Auto-refresh CSE data during market hours
+#
+#  CSE Market Hours: Mon–Fri  09:30–14:30 IST
+#  IST = UTC+5:30   →   UTC: 04:00–09:00
+#
+#  Cron fires every 15 min during those hours, plus:
+#    - A hard refresh at market open (04:00 UTC)
+#    - A final snapshot at market close (09:00 UTC)
+# ================================================================
+[triggers]
+crons = [
+  "*/15 4-9 * * 1-5",   # every 15 min during CSE trading hours
+  "0 4   * * 1-5",      # market open  — 09:30 IST force refresh
+  "0 9   * * 1-5",      # market close — 14:30 IST final snapshot
+  "0 0   * * 1",        # Monday midnight — weekly data housekeeping
+]
+
+# ================================================================
+#  WORKER LIMITS (Cloudflare Free tier defaults shown)
+#  Uncomment and adjust if you upgrade to Workers Paid ($5/mo)
+# ================================================================
+# [limits]
+# cpu_ms = 50          # Free: 10ms  |  Paid: 50ms
+# memory_mb = 128      # Both tiers: 128MB
+
+# ================================================================
+#  ENVIRONMENT VARIABLES (non-secret, safe to commit)
+#  Secrets (API keys) are set via CLI: npx wrangler secret put
+# ================================================================
+[vars]
+ENVIRONMENT        = "production"
+APP_NAME           = "CSE Pulse"
+CSE_API_BASE       = "https://www.cse.lk/api"
+CBSL_BASE          = "https://www.cbsl.gov.lk"
+
+# Cache TTLs in seconds
+CACHE_TTL_MARKET   = "90"    # 90s during trading, 300s after hours
+CACHE_TTL_MOVERS   = "120"   # 2 minutes
+CACHE_TTL_SECTORS  = "180"   # 3 minutes
+CACHE_TTL_FOREX    = "300"   # 5 minutes
+CACHE_TTL_CBSL     = "3600"  # 1 hour (CBSL updates once daily)
+CACHE_TTL_NEWS     = "900"   # 15 minutes
+
+# Stock Sense LK AI settings
+AI_MODEL           = "claude-sonnet-4-20250514"
+AI_MAX_TOKENS      = "800"
+
+# ================================================================
+#  CUSTOM DOMAIN (uncomment after domain is added to Cloudflare)
+#
+#  After setting up csepulse.lk in Cloudflare Dashboard:
+#  Dashboard → Workers & Pages → cse-pulse-api
+#            → Triggers → Custom Domains → Add api.csepulse.lk
+#
+#  OR uncomment the routes block below:
+# ================================================================
+# [[routes]]
+# pattern   = "api.csepulse.lk/*"
+# zone_name = "csepulse.lk"
+
+# ================================================================
+#  SECRETS — Set via CLI only, NEVER paste keys in this file
+#
+#  npx wrangler secret put ANTHROPIC_API_KEY
+#      Your Anthropic key (sk-ant-...) — powers Stock Sense LK
+#
+#  npx wrangler secret put ALPHA_VANTAGE_KEY
+#      Free key from alphavantage.co — USD/LKR + gold prices
+#
+#  npx wrangler secret put MARKETAUX_KEY
+#      Free key from marketaux.com — SL financial news + sentiment
+#
+#  npx wrangler secret put ADMIN_TOKEN
+#      Any random string you make up — protects /api/cache/clear
+#      Example: cse-pulse-admin-2025-xk9mq7
+#
+#  npx wrangler secret put ALLOWED_ORIGIN
+#      Your frontend domain for CORS
+#      Use * during development, https://www.csepulse.lk in prod
+# ================================================================
+
+# ================================================================
+#  LOCAL DEVELOPMENT
+#
+#  Run locally with real KV:   npx wrangler dev --remote
+#  Run locally with local KV:  npx wrangler dev
+#
+#  Test endpoints:
+#    curl http://localhost:8787/api/health
+#    curl http://localhost:8787/api/market
+#    curl http://localhost:8787/api/status
+# ================================================================
