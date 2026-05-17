@@ -1418,7 +1418,7 @@ footer { background: rgba(0,0,0,.5); border-top: .5px solid rgba(255,255,255,.06
    Worker base URL — update this to your Cloudflare Worker
 ════════════════════════════════════════════════════ */
 
-const WORKER_BASE = 'https://fbandgoogle.heshan-998.workers.dev'; // ← your worker URL
+const WORKER_BASE = 'https://cse-pulse-api.heshan-998.workers.dev/'; // ← your worker URL
 
 async function workerGet(path) {
   const r = await fetch(WORKER_BASE + path, { headers: {'Content-Type':'application/json'} });
